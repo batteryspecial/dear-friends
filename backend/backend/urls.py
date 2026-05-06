@@ -20,3 +20,17 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+# TODO: configure in nginx in production
+if (settings.DEBUG):
+    urlpatterns += static(
+        '/assets/',
+        document_root=settings.BASE_DIR / 'static'
+    )
+    urlpatterns += static(
+        '/media/',
+        document_root=settings.MEDIA_ROOT
+    )
