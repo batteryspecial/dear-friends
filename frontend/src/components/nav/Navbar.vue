@@ -27,20 +27,20 @@ import SearchIcon from '@/components/icons/search.vue'
                 <div class="navbar-center md:justify-center justify-end lg:w-4/5 max-w-150">
                     <div class="join w-4/5 flex justify-center">
                         <input class="input outline-none border-none rounded-l-xl w-4/5 join-item" placeholder="搜索你感兴趣的内容" />
-                        <button class="btn bg-amber-600/90 hover:bg-amber-600 transition-colors duration-300 rounded-r-xl join-item ">
+                        <button class="btn bg-[#42b983] hover:bg-[#5e8bee] transition-colors duration-300 rounded-r-xl join-item ">
                             <SearchIcon />
                             <span class="hidden lg:block">搜索</span>
                         </button>
                     </div>
                 </div>
                 <div class="navbar-end">
-                    <button class="btn btn-ghost text-lg">登录</button>
+                    <RouterLink :to="{name: 'user_login'}" active-class="btn-active" class="btn btn-ghost text-lg">
+                        登录
+                    </RouterLink>
                 </div>
             </nav>
             <!-- Page content here -->
-            <div class="p-4">
-                <slot></slot>
-            </div>
+            <slot></slot>
         </div>
 
         <div class="drawer-side is-drawer-close:overflow-visible">
@@ -52,21 +52,21 @@ import SearchIcon from '@/components/icons/search.vue'
                 <ul class="menu w-full grow gap-y-2">
                     <!-- List item -->
                     <li>
-                        <RouterLink :to="{name: 'homepage_index'}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center items-center" data-tip="主页">
+                        <RouterLink :to="{name: 'homepage_index'}" active-class="menu-focus" class="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center items-center" data-tip="主页">
                             <!-- Home icon -->
                             <HomeIcon />
                             <span class="is-drawer-close:hidden is-drawer-open:animate-[fadeIn_0.5s_ease_0.2s_both]">主页</span>
                         </RouterLink>
                     </li>
                     <li>
-                        <RouterLink :to="{name: 'friend_index'}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center items-center" data-tip="好友">
+                        <RouterLink :to="{name: 'friend_index'}" active-class="menu-focus" class="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center items-center" data-tip="好友">
                             <!-- User icon -->
                             <UserIcon />
                             <span class="is-drawer-close:hidden is-drawer-open:animate-[fadeIn_0.5s_ease_0.2s_both]">好友</span>
                         </RouterLink>
                     </li>
                     <li>
-                        <RouterLink :to="{name: 'create_index'}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center items-center" data-tip="创造">
+                        <RouterLink :to="{name: 'create_index'}" active-class="menu-focus" class="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center items-center" data-tip="创造">
                             <!-- Create icon -->
                             <CreateIcon />
                             <span class="is-drawer-close:hidden is-drawer-open:animate-[fadeIn_0.5s_ease_0.2s_both]">创造</span>
