@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomeView from '@/views/HomeView.vue'
 import FriendIndex from '@/views/friends/FriendIndex.vue'
 import CreateIndex from '@/views/create/CreateIndex.vue'
 import ErrorIndex from '@/views/error/ErrorIndex.vue'

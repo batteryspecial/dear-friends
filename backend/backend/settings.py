@@ -139,17 +139,17 @@ MEDIA_ROOT = BASE_DIR / 'media'
 from datetime import timedelta
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES' : {
+    'DEFAULT_AUTHENTICATION_CLASSES' : [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    },
+    ],
 }
 
 # simplejwt settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME' : timedelta(hours=2.1),
-    'REFRESH_TOKEN_LIFETIME' : timedelta(hours=6.7),
+    'REFRESH_TOKEN_LIFETIME' : timedelta(days=6.7),
 
-    'ROTATE_REFRESH_TOKENS' : True,
+    'ROTATE_REFRESH_TOKENS' : True, # if true, refreshing access will also refresh "refresh"
     'BLACKLIST_AFTER_ROTATION' : True,
 
     'AUTH_HEADER_TYPES' : ("Bearer",),
