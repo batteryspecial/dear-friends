@@ -15,6 +15,21 @@ jobs:
       matrix:
         python-version: ["3.14"]
 
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: ci_db
+          POSTGRES_USER: ci_user
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -28,5 +43,10 @@ jobs:
     - name: Run Tests
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        DB_NAME: ci_db
+        DB_USER: ci_user
+        DB_PASSWORD: ""
+        DB_HOST: localhost
+        DB_PORT: 5432
       run: |
         python backend/manage.py test
