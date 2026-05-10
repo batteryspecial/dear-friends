@@ -32,7 +32,7 @@ class LoginView(APIView):
                     'user_id' : user.id,
                     'username' : user.username,
                     'image' : user_profile.image.url,
-                    'profile' : user_profile.bio,
+                    'bio' : user_profile.bio,
                 })
 
                 response.set_cookie(
