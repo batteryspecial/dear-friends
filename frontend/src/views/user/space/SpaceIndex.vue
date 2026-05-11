@@ -5,7 +5,7 @@ const route = useRoute()
 const router = useRouter()
 
 router.push({
-    name: 'home_page'
+    name: 'user_space'
 })
 </script>
 

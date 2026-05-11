@@ -17,10 +17,15 @@ function closeMenu() {
     if (element && element instanceof HTMLElement)
         element.blur()
 }
+
+const logoutClick = () => {
+    closeMenu();
+    user.logout();
+}
 </script>
 
 <template>
-    <div class="dropdown dropdown-end">
+    <div class="px-4 dropdown dropdown-end">
         <div tabindex="0" role="button" class="avatar btn btn-circle w-8 h-8 mr-5">
             <div class="w-8 rounded-full shadow-md hover:shadow-lg">
                 <img :src="user.image" alt="profile" referrerpolicy="origin"/>
@@ -49,7 +54,7 @@ function closeMenu() {
             <li></li>
             
             <li>
-                <a @click="closeMenu" class="text-base font-semibold">
+                <a @click="logoutClick" class="text-base font-semibold">
                     <UserLogoutIcon class="w-5 h-auto" />
                     <span class="text-base font-semibold">退出登录</span>
                 </a>

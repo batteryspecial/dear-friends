@@ -13,7 +13,7 @@ class LoginView(APIView):
     def post(self, request: Request, *args, **kwargs):
         try:
             username = request.data.get('username').strip()
-            password = request.data('password').strip()
+            password = request.data.get('password').strip()
 
             if not username or not password:
                 return Response({
@@ -23,7 +23,7 @@ class LoginView(APIView):
             user = authenticate(username=username, password=password)
 
             if user:
-                user_profile = UserProfile.objects.get(username=username)
+                user_profile = UserProfile.objects.get(user=user)
                 refresh = RefreshToken.for_user(user)
 
                 response = Response({
@@ -37,7 +37,7 @@ class LoginView(APIView):
 
                 response.set_cookie(
                     key='refresh_token', 
-                    refresh=str(refresh), 
+                    value=str(refresh), 
                     httponly=True, 
                     samesite='Lax', 
                     secure=True,
