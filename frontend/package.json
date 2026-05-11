@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^0.0.0-insiders.f3fdda2",
+    "axios": "^1.16.0",
     "croppie": "^2.6.5",
     "pinia": "^3.0.4",
     "vue": "^3.5.32",
