@@ -18,7 +18,7 @@ class LoginView(APIView):
             if not username or not password:
                 return Response({
                     'result' : '用户名和密码不能为空'
-                })
+                }, status=400)
 
             user = authenticate(username=username, password=password)
 
@@ -48,9 +48,9 @@ class LoginView(APIView):
             else:
                 return Response({
                     'result' : '用户或密码错误'
-                })
+                }, status=401)
 
         except:
             return Response({
                 'result' : '系统异常，请稍后重试'
-            })
+            }, status=500)

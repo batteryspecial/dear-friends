@@ -19,12 +19,12 @@ class RegisterView(APIView):
             if not username or not password:
                 return Response({
                     'result' : '用户名和密码不能为空'
-                })
+                }, status=400)
             
             if User.objects.filter(username=username).exists():
                 return Response({
                     'result' : '用户名已存在，请重试'
-                })
+                }, status=400)
             
             user = User.objects.create_user(username=username, password=password)
             user_profile = UserProfile.objects.create(user=user)
@@ -43,7 +43,7 @@ class RegisterView(APIView):
 
             response.set_cookie(
                 key='refresh_token', 
-                refresh=str(refresh), 
+                value=str(refresh),
                 httponly=True, 
                 samesite='Lax', 
                 secure=True,
@@ -54,4 +54,4 @@ class RegisterView(APIView):
         except:
             return Response({
                 'result' : '系统异常，请稍后重试'
-            })
+            }, status=500)

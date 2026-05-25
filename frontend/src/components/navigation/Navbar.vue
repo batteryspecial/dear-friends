@@ -28,7 +28,7 @@ const user = useUserStore()
                 <div class="navbar-center md:justify-center justify-end lg:w-4/5 max-w-150">
                     <div class="join w-4/5 flex justify-center">
                         <input class="input outline-none border-none rounded-l-xl w-4/5 join-item" placeholder="搜索你感兴趣的内容" />
-                        <button class="btn bg-[#42b983] hover:bg-[#5e8bee] transition-colors duration-300 rounded-r-xl join-item ">
+                        <button class="btn bg-(--vue-base) hover:bg-(--vue-compliment) transition-colors duration-300 rounded-r-xl join-item ">
                             <SearchIcon />
                             <span class="hidden lg:block">搜索</span>
                         </button>
@@ -85,12 +85,8 @@ const user = useUserStore()
 </template>
 
 <style scoped>
-</style>
-
-<style>
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 </style>
-

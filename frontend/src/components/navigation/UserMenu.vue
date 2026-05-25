@@ -4,23 +4,29 @@ import UserProfileIcon from '@/components/icons/user.vue'
 import UserLogoutIcon from '@/components/icons/leave.vue'
 
 import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
+import api from '@/js/http/api';
 
 const user = useUserStore()
+const router = useRouter()
 
 const menuActionItems = [
     { icon: UserSpaceIcon,   label: '个人空间', to: () => ({ name: 'user_space', params: { user_id: user.id } }) },
     { icon: UserProfileIcon, label: '个人资料', to: () => ({ name: 'user_profile' }) },
 ]
 
-function closeMenu() {
-    const element = document.activeElement
-    if (element && element instanceof HTMLElement)
-        element.blur()
-}
-
-const logoutClick = () => {
-    closeMenu();
-    user.logout();
+async function handleLogout() {
+    try {
+        const r = await api.post('/api/user/account/logout/')
+        if (r.data.result === 'success') {
+            user.logout()
+            await router.push({
+                name: 'homepage_index'
+            })
+        }
+    } catch (err) {
+        console.log(err)
+    }
 }
 </script>
 
@@ -45,7 +51,7 @@ const logoutClick = () => {
 
             <!-- regular menu icons -->
             <li v-for="item in menuActionItems" :key="item.label">
-                <RouterLink @click="closeMenu" :to="item.to()">
+                <RouterLink @click="handleLogout" :to="item.to()">
                     <component :is="item.icon" class="w-5 h-auto" />
                     <span class="text-base font-semibold">{{ item.label }}</span>
                 </RouterLink>
@@ -54,7 +60,7 @@ const logoutClick = () => {
             <li></li>
             
             <li>
-                <a @click="logoutClick" class="text-base font-semibold">
+                <a @click="handleLogout" class="text-base font-semibold">
                     <UserLogoutIcon class="w-5 h-auto" />
                     <span class="text-base font-semibold">退出登录</span>
                 </a>
