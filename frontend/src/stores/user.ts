@@ -18,6 +18,8 @@ export const useUserStore = defineStore('user', () => {
 
     const accessToken = ref<string>('')
 
+    const hasPulledUserInfo = ref<boolean>(false)
+
     function isLoggedIn(): boolean {
         return !!accessToken.value
     }
@@ -33,6 +35,10 @@ export const useUserStore = defineStore('user', () => {
         bio.value = data.bio
     }
 
+    function setHasPulledUserInfo(newStatus: boolean) {
+        hasPulledUserInfo.value = newStatus
+    }
+
     function logout(): void {
         accessToken.value = ''
         id.value = 0
@@ -42,6 +48,8 @@ export const useUserStore = defineStore('user', () => {
     }
 
     return {
-        accessToken, id, username, image, bio, isLoggedIn, setAccessToken, setUserInfo, logout
+        accessToken, id, username, image, bio, isLoggedIn, 
+        setAccessToken, setUserInfo, logout,
+        hasPulledUserInfo, setHasPulledUserInfo
     }
 })

@@ -39,7 +39,7 @@ class RegisterView(APIView):
                 'username' : user.username,
                 'image' : user_profile.image.url,
                 'bio' : user_profile.bio,
-            })
+            }, status=201)
 
             response.set_cookie(
                 key='refresh_token', 

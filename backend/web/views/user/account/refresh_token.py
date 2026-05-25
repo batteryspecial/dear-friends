@@ -25,20 +25,20 @@ class RefreshTokenView(APIView):
                 response = Response({
                     'result' : 'success',
                     'access' : str(refresh.access_token)
-                })
+                }, status=200)
                 response.set_cookie(
                     key='refresh_token', 
-                    refresh=str(refresh), 
+                    value=str(refresh), 
                     httponly=True, 
-                    samesite='Lax', 
-                    secure=True,
+                    samesite='Lax',
+                    secure=settings.REFRESH_COOKIE_SECURE,
                     max_age=86400 * 6.7
                 )
                 return response
             return Response({
                 'result' : 'success',
                 'access' : str(refresh.access_token)
-            })
+            }, status=200)
         except:
             return Response({
                 'result' : 'refresh token 过期了',

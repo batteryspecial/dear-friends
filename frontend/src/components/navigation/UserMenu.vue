@@ -15,6 +15,12 @@ const menuActionItems = [
     { icon: UserProfileIcon, label: '个人资料', to: () => ({ name: 'user_profile' }) },
 ]
 
+function closeMenu() {
+    const element = document.activeElement
+    if (element && element instanceof HTMLElement)
+        element.blur()
+}
+
 async function handleLogout() {
     try {
         const r = await api.post('/api/user/account/logout/')
@@ -51,7 +57,7 @@ async function handleLogout() {
 
             <!-- regular menu icons -->
             <li v-for="item in menuActionItems" :key="item.label">
-                <RouterLink @click="handleLogout" :to="item.to()">
+                <RouterLink @click="clo" :to="item.to()">
                     <component :is="item.icon" class="w-5 h-auto" />
                     <span class="text-base font-semibold">{{ item.label }}</span>
                 </RouterLink>

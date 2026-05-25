@@ -10,7 +10,7 @@ class LogoutView(APIView):
     def post(self, request):
         response = Response({
             'result' : 'success',
-        })
+        }, status=200)
 
         response.delete_cookie('refresh_token') # will not throw if token dne
         return response

@@ -11,7 +11,7 @@ import HomepageIndex from '@/views/homepage/HomepageIndex.vue'
 import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory('/'), // import.meta.env.BASE_URL
   routes: [
     {
       path: '/',
@@ -91,10 +91,11 @@ const router = createRouter({
 // router guard
 router.beforeEach((to, from) => {
   const user = useUserStore()
-  if (to.meta.needLogin && !user.isLoggedIn()) {
+
+  // if the user has not pulled their info, their missing access token will make this dead code
+  if (to.meta.needLogin && user.hasPulledUserInfo && !user.isLoggedIn()) {
     return {
       name: 'user_login',
-
     }
   }
   return true

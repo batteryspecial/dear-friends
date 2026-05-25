@@ -35,14 +35,14 @@ const user = useUserStore()
                     </div>
                 </div>
                 <div class="navbar-end">
-                    <RouterLink v-if="user.isLoggedIn()" :to="{name: 'create_index'}" active-class="btn-active" class="btn btn-ghost text-base mr-5">
+                    <RouterLink v-if="user.hasPulledUserInfo && user.isLoggedIn()" :to="{name: 'create_index'}" active-class="btn-active" class="btn btn-ghost text-base mr-5">
                         <CreateIcon />
                         <span>创作</span>
                     </RouterLink>
-                    <RouterLink v-if="!user.isLoggedIn()" :to="{name: 'user_login'}" active-class="btn-active" class="btn btn-ghost text-lg">
+                    <RouterLink v-if="user.hasPulledUserInfo && !user.isLoggedIn()" :to="{name: 'user_login'}" active-class="btn-active" class="btn btn-ghost text-lg">
                         登录
                     </RouterLink>
-                    <UserMenu v-else />
+                    <UserMenu v-else-if="user.hasPulledUserInfo && user.isLoggedIn()" />
                 </div>
             </nav>
             <!-- Page content here -->

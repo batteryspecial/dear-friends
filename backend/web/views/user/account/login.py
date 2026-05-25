@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import authenticate
 
 from rest_framework.views import APIView
@@ -33,14 +34,14 @@ class LoginView(APIView):
                     'username' : user.username,
                     'image' : user_profile.image.url,
                     'bio' : user_profile.bio,
-                })
+                }, status=200)
 
                 response.set_cookie(
                     key='refresh_token', 
                     value=str(refresh), 
                     httponly=True, 
-                    samesite='Lax', 
-                    secure=True,
+                    samesite='Lax',
+                    secure=settings.REFRESH_COOKIE_SECURE,
                     max_age=86400 * 6.7
                 )
 
