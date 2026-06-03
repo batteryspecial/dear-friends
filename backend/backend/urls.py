@@ -15,8 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
 
+from web import views
 
 
 urlpatterns = [
@@ -26,14 +27,23 @@ urlpatterns = [
 
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.static import serve as serve_static
 
-# TODO: configure in nginx in production
-if (settings.DEBUG):
-    urlpatterns += static(
-        '/assets/',
-        document_root=settings.BASE_DIR / 'static'
-    )
-    urlpatterns += static(
-        '/media/',
-        document_root=settings.MEDIA_ROOT
-    )
+# TODO: in production, nginx serves /static/ with:
+#   try_files $uri /static/frontend/index.html;
+if settings.DEBUG:
+    FRONTEND_ROOT = settings.BASE_DIR / 'static' / 'frontend'
+    urlpatterns += [
+        re_path(
+            r'^static/frontend/assets/(?P<path>.*)$',
+            serve_static,
+            {'document_root': FRONTEND_ROOT / 'assets'},
+        ),
+        re_path(
+            r'^static/frontend/favicon\.ico$',
+            serve_static,
+            {'path': 'favicon.ico', 'document_root': FRONTEND_ROOT},
+        ),
+        re_path(r'^static/frontend/', views.home),
+    ]
+    urlpatterns += static('/media/', document_root=settings.MEDIA_ROOT)

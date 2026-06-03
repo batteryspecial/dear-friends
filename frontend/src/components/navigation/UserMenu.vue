@@ -57,7 +57,7 @@ async function handleLogout() {
 
             <!-- regular menu icons -->
             <li v-for="item in menuActionItems" :key="item.label">
-                <RouterLink @click="clo" :to="item.to()">
+                <RouterLink @click="closeMenu" :to="item.to()">
                     <component :is="item.icon" class="w-5 h-auto" />
                     <span class="text-base font-semibold">{{ item.label }}</span>
                 </RouterLink>
