@@ -32,18 +32,11 @@ from django.views.static import serve as serve_static
 # TODO: in production, nginx serves /static/ with:
 #   try_files $uri /static/frontend/index.html;
 if settings.DEBUG:
-    FRONTEND_ROOT = settings.BASE_DIR / 'static' / 'frontend'
-    urlpatterns += [
-        re_path(
-            r'^static/frontend/assets/(?P<path>.*)$',
-            serve_static,
-            {'document_root': FRONTEND_ROOT / 'assets'},
-        ),
-        re_path(
-            r'^static/frontend/favicon\.ico$',
-            serve_static,
-            {'path': 'favicon.ico', 'document_root': FRONTEND_ROOT},
-        ),
-        re_path(r'^static/frontend/', views.home),
-    ]
-    urlpatterns += static('/media/', document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(
+        '/assets/',
+        document_root=settings.BASE_DIR / 'static/frontend/assets'
+    )
+    urlpatterns += static(
+        '/media/',
+        document_root=settings.MEDIA_ROOT
+    )

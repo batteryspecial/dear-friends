@@ -17,12 +17,10 @@ from web.views.user.account.get_user_info import GetUserInfoView
 """
 
 urlpatterns = [
+    path('', views.home, name='homepage'),
     path('api/user/account/login/', LoginView.as_view(), name='login_view'),
     path('api/user/account/logout/', LogoutView.as_view(), name='logout_view'),
     path('api/user/account/register/', RegisterView.as_view(), name='register_view'),
     path('api/user/account/refresh_token/', RefreshTokenView.as_view(), name='refresh_token_view'),
     path('api/user/account/get_user_info/', GetUserInfoView.as_view(), name='get_user_info_view'),
-
-    path('', views.home, name='homepage'),
-    re_path(r'^(?!media/|static/|assets/).*$', views.home),
 ]

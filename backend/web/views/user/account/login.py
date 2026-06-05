@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.auth import authenticate
 
 from rest_framework.views import APIView
@@ -41,7 +40,7 @@ class LoginView(APIView):
                     value=str(refresh), 
                     httponly=True, 
                     samesite='Lax',
-                    secure=settings.REFRESH_COOKIE_SECURE,
+                    secure=True,
                     max_age=86400 * 6.7
                 )
 
