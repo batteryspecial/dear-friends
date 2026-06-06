@@ -22,7 +22,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/friend',
+      path: '/friend/',
       name: 'friend_index',
       component: FriendIndex,
       meta: {
@@ -30,7 +30,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/create',
+      path: '/create/',
       name: 'create_index',
       component: CreateIndex,
       meta: {
@@ -38,7 +38,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/404',
+      path: '/404/',
       name: 'not_found',
       component: ErrorIndex,
       meta: {
@@ -46,7 +46,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/user/account/login',
+      path: '/user/account/login/',
       name: 'user_login',
       component: LoginIndex,
       meta: {
@@ -54,7 +54,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/user/account/register',
+      path: '/user/account/register/',
       name: 'user_register',
       component: RegisterIndex,
       meta: {
@@ -62,7 +62,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/user/space/:user_id',
+      path: '/user/space/:user_id/',
       name: 'user_space',
       component: SpaceIndex,
       meta: {
@@ -70,7 +70,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/user/profile',
+      path: '/user/profile/',
       name: 'user_profile',
       component: ProfileIndex,
       meta: {

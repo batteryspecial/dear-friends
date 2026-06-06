@@ -43,7 +43,7 @@ async function handleLogout() {
                 <img :src="user.image" alt="profile" referrerpolicy="origin"/>
             </div>
         </div>
-        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 gap-y-3 shadow-md">
+        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-35 p-2 gap-y-3 shadow-md">
             <li>
                 <RouterLink @click="closeMenu" :to="{name: 'user_space', params: {user_id: user.id}}">
                     <div class="avatar">
@@ -51,7 +51,7 @@ async function handleLogout() {
                             <img :src="user.image" alt="username" referrerpolicy="origin"/>
                         </div>
                     </div>
-                    <span class="text-base font-semibold line-clamp-1">{{ user.username }}</span>
+                    <span class="text-base font-semibold line-clamp-1 break-all">{{ user.username }}</span>
                 </RouterLink>
             </li>
 
