@@ -12,7 +12,7 @@ def img_upload_to(instance, filename):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='user/img/default.png', upload_to=img_upload_to)
+    image = models.ImageField(default='user/img/default.png', upload_to=img_upload_to) # requires Pillow
     bio = models.TextField(default='感谢同志们的关注', max_length=500)
     created_at = models.DateTimeField(default=now)
     updated_at = models.DateTimeField(default=now)
