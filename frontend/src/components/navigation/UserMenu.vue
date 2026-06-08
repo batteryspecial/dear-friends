@@ -37,13 +37,13 @@ async function handleLogout() {
 </script>
 
 <template>
-    <div class="px-4 dropdown dropdown-end">
+    <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="avatar btn btn-circle w-8 h-8 mr-5">
             <div class="w-8 rounded-full shadow-md hover:shadow-lg">
                 <img :src="user.image" alt="profile" referrerpolicy="origin"/>
             </div>
         </div>
-        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-35 p-2 gap-y-3 shadow-md">
+        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-45 p-2 gap-y-2 mt-5 shadow-md">
             <li>
                 <RouterLink @click="closeMenu" :to="{name: 'user_space', params: {user_id: user.id}}">
                     <div class="avatar">

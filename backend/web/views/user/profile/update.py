@@ -24,17 +24,17 @@ class UpdateProfileView(APIView):
             if not new_username:
                 return Response({
                     'result' : '用户名不能为空'
-                }, status=400)
+                })
             
             if not new_bio:
                 return Response({
                     'result' : '简介不能为空'
-                }, status=400)
+                })
             
             if (new_username != user.username and User.objects.filter(username=new_username).exists()):
                 return Response({
                     'result' : '用户名已被占用'
-                }, status=400)
+                })
             
             if new_image:
                 remove_old_image(image=user_profile.image)

@@ -48,7 +48,7 @@ class LoginView(APIView):
             else:
                 return Response({
                     'result' : '用户或密码错误'
-                }, status=401)
+                })
 
         except:
             return Response({
