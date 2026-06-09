@@ -8,8 +8,12 @@ from web.views.user.account.logout import LogoutView
 from web.views.user.account.register import RegisterView
 from web.views.user.account.refresh_token import RefreshTokenView
 from web.views.user.account.get_user_info import GetUserInfoView
-
 from web.views.user.profile.update import UpdateProfileView
+
+from web.views.create.character.create import CreateCharacterView
+from web.views.create.character.update import UpdateCharacterView
+from web.views.create.character.delete import DeleteCharacterView
+from web.views.create.character.get_ch import GetCharacterView
 
 """
 - If frontend and backend urls match -> TemplateNotExist
@@ -24,7 +28,12 @@ urlpatterns = [
     path('api/user/account/refresh_token/', RefreshTokenView.as_view(), name='refresh_token_view'),
     path('api/user/account/get_user_info/', GetUserInfoView.as_view(), name='get_user_info_view'),
     path('api/user/profile/update/', UpdateProfileView.as_view(), name='update_profile_view'),
-    
+
+    path('api/create/character/create/', CreateCharacterView.as_view(), name='create_character_view'),
+    path('api/create/character/update/', UpdateCharacterView.as_view(), name='update_character_view'),
+    path('api/create/character/delete/', DeleteCharacterView.as_view(), name='delete_character_view'),
+    path('api/create/character/get_ch/', GetCharacterView.as_view(), name='get_character_view'),
+
     path('', views.home, name='homepage'),
     re_path(r'^(?!media/|static/|assets/).*$', views.home),
 ]
