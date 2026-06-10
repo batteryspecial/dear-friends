@@ -16,7 +16,7 @@ defineExpose({
 <template>
     <fieldset class="fieldset">
         <label class="label text-base">简介</label>
-        <textarea v-model="newBio" rows="6" type="text" class="textarea w-full"></textarea>
+        <textarea v-model="newBio" rows="6" type="text" class="textarea w-full max-h-67"></textarea>
     </fieldset>
 </template>
 

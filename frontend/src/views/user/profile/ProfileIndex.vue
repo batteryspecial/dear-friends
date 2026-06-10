@@ -4,7 +4,6 @@ import Image from './_components/Image.vue';
 import Username from './_components/Username.vue';
 
 import api from '@/js/http/api.ts';
-import { type UserInfo } from '@/stores/user';
 import { useTemplateRef, ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { base64ToFile } from '@/js/utils/base64_to_file.ts';
@@ -55,9 +54,9 @@ async function handleUpdate() {
 <template>
     个人资料
     <div class="flex justify-center">
-        <div class="card card-border w-120 bg-base-200 shadow-sm mt-[15vh]">
+        <div class="card card-border w-120 bg-base-200 shadow-sm mt-[11vh]">
             <div class="card-body">
-                <h3 class="card-title">编辑资料</h3>
+                <h3 class="card-title font-semibold!">编辑资料</h3>
                 <Image ref="image-ref" :image="user.image"/>
                 <Username ref="username-ref" :username="user.username"/>
                 <Bio ref="bio-ref" :bio="user.bio" />
