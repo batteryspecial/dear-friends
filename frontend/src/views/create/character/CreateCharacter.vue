@@ -8,6 +8,7 @@ import { base64ToFile } from '@/js/utils/base64_to_file.ts';
 import api from '@/js/http/api.ts';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user.ts';
+import { isAxiosError } from 'axios';
 
 // 6/13/2025 (Saturday)
 // -> I decided to start using semicolons again
@@ -58,7 +59,8 @@ async function handleCreate() {
                 errMsg.value = data.result
             }
         } catch (err) {
-
+            errMsg.value = (isAxiosError(err) ? err.response?.data?.result : null) ?? '请求失败，请稍后重试';
+            console.log(err)
         }
     }
 }
@@ -77,7 +79,7 @@ async function handleCreate() {
                 <p v-if="errMsg" class="text-red-500 text-sm">{{ errMsg }}</p>
 
                 <div class="justify-end card-actions">
-                    <button class="btn btn-vue">更新</button>
+                    <button @click="handleCreate" class="btn btn-vue">更新</button>
                 </div>
             </div>
         </div>
