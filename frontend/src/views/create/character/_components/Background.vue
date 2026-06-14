@@ -82,7 +82,7 @@ defineExpose({
 <template>
     <fieldset class="fieldset">
         <label class="label text-base">聊天背景</label>
-        <div class="border-y-1 py-4 flex justify-center">
+        <div class="border-y-1 border-[#464e57] py-4 flex justify-center">
             <div class="avatar relative"
                 @mouseenter="isHovered=true"
                 @mouseleave="isHovered=false"
