@@ -37,14 +37,12 @@ async function handleCreate() {
         errMsg.value = '名字不能为空';
     } else if (!desc) {
         errMsg.value = '角色简介不能为空';
-    } else if (!bg) {
-        errMsg.value = '聊天背景不能为空';
     } else {
         const formData = new FormData()
         formData.append('name', name);
         formData.append('desc', desc);
         formData.append('image', base64ToFile(image, 'image.png'));
-        formData.append('bg_image', base64ToFile(bg, 'background.png'));
+        if (bg) formData.append('bg_image', base64ToFile(bg, 'background.png'));
 
         try {
             const r = await api.post('/api/create/character/create/', formData);
@@ -79,7 +77,7 @@ async function handleCreate() {
                 <p v-if="errMsg" class="text-red-500 text-sm">{{ errMsg }}</p>
 
                 <div class="justify-end card-actions">
-                    <button @click="handleCreate" class="btn btn-vue">更新</button>
+                    <button @click="handleCreate" class="btn btn-vue">创造</button>
                 </div>
             </div>
         </div>

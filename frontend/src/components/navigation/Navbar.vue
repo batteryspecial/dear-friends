@@ -35,7 +35,7 @@ const user = useUserStore()
                     </div>
                 </div>
                 <div class="navbar-end">
-                    <RouterLink v-if="user.hasPulledUserInfo && user.isLoggedIn()" :to="{name: 'create_index'}" active-class="btn-active" class="btn btn-ghost text-base mr-5">
+                    <RouterLink v-if="user.hasPulledUserInfo && user.isLoggedIn()" :to="{name: 'update_character', params: { character_id: 1 }}" active-class="btn-active" class="btn btn-ghost text-base mr-5">
                         <CreateIcon />
                         <span>创作</span>
                     </RouterLink>
@@ -72,7 +72,7 @@ const user = useUserStore()
                         </RouterLink>
                     </li>
                     <li>
-                        <RouterLink :to="{name: 'create_index'}" active-class="menu-focus" class="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center items-center" data-tip="创造">
+                        <RouterLink :to="{name: 'create_character'}" active-class="menu-focus" class="is-drawer-close:tooltip is-drawer-close:tooltip-right flex justify-center items-center" data-tip="创造">
                             <!-- Create icon -->
                             <CreateIcon />
                             <span class="is-drawer-close:hidden is-drawer-open:animate-[fadeIn_0.5s_ease_0.2s_both]">创造</span>

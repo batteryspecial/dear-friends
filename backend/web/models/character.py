@@ -19,7 +19,7 @@ class Character(models.Model):
     name = models.CharField(max_length=67)
     image = models.ImageField(upload_to=img_upload_to)
     desc = models.TextField(max_length=6767)
-    bg_image = models.ImageField(upload_to=bg_upload_to)
+    bg_image = models.ImageField(default='character/bg/default_bg.png', upload_to=bg_upload_to)
     created_at = models.DateTimeField(default=now)
     updated_at = models.DateTimeField(default=now)
 

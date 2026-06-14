@@ -9,6 +9,7 @@ import SpaceIndex from '@/views/user/space/SpaceIndex.vue'
 import ProfileIndex from '@/views/user/profile/ProfileIndex.vue'
 import HomepageIndex from '@/views/homepage/HomepageIndex.vue'
 import { useUserStore } from '@/stores/user'
+import UpdateCharacter from '@/views/create/character/UpdateCharacter.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,8 +32,16 @@ const router = createRouter({
     },
     {
       path: '/create/',
-      name: 'create_index',
+      name: 'create_character',
       component: CreateIndex,
+      meta: {
+        needLogin: true,
+      },
+    },
+    {
+      path: '/create/character/update/:character_id/',
+      name: 'update_character',
+      component: UpdateCharacter,
       meta: {
         needLogin: true,
       },

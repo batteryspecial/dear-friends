@@ -1,4 +1,5 @@
 from django.utils.timezone import now
+import logging
 
 from rest_framework.views import APIView
 from rest_framework.request import Request
@@ -9,12 +10,14 @@ from web.models.character import Character
 
 from web.views.utils.profile_image import remove_old_image
 
+logger = logging.getLogger(__name__)
+
 class UpdateCharacterView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request: Request):
         try:
             character_id = request.data['character_id']
-            character: Character = Character.data.get(id=character_id, author__user=request.user)
+            character: Character = Character.objects.get(id=character_id, author__user=request.user)
 
             name = request.data['name'].strip()
             desc = request.data['desc'].strip()
@@ -45,7 +48,6 @@ class UpdateCharacterView(APIView):
             return Response({
                 'result' : 'success'
             }, status=200)
-        except:
-            return Response({
-                'result' : '系统异常，请稍后重试'
-            }, status=500)
+        except Exception as e:
+            logger.exception(e)
+            return Response({ 'result' : '系统异常，请稍后重试'}, status=500)

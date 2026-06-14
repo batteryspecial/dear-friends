@@ -28,16 +28,17 @@ class CreateCharacterView(APIView):
                 return Response({ 'result' : '角色介绍不能为空' }, status=400)
             if not image:
                 return Response({ 'result' : '头像不能为空' }, status=400)
-            if not bg_image:
-                return Response({ 'result' : '聊天背景不能为空' }, status=400)
             
-            Character.objects.create(
-                author=user_profile,
-                name=name,
-                desc=desc,
-                image=image,
-                bg_image=bg_image if bg_image else None,
-            )
+            character_data = {
+                'author' : user_profile,
+                'name' : name,
+                'desc' : desc,
+                'image' : image,
+            }
+            if bg_image:
+                character_data['bg_image'] = bg_image
+            
+            Character.objects.create(**character_data)
             return Response({ 'result' : 'success' }, status=200)
         except Exception as e:
             mogger.exception(e)
