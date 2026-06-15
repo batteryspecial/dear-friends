@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from web.models.character import Character
+from utils.profile_image import remove_old_image
 
 
 class DeleteCharacterView(APIView):
@@ -12,7 +13,10 @@ class DeleteCharacterView(APIView):
     def post(self, request: Request):
         try:
             character_id = request.data['character_id']
-            Character.objects.filter(pk=character_id, author__user=request.user).delete()
+            character = Character.objects.get(pk=character_id, author__user=request.user)
+
+            remove_old_image(character.image)
+            remove_old_image(character.bg_image)
 
             return Response({
                 'result' : 'success',

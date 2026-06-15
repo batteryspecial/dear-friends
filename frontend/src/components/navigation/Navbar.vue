@@ -35,7 +35,7 @@ const user = useUserStore()
                     </div>
                 </div>
                 <div class="navbar-end">
-                    <RouterLink v-if="user.hasPulledUserInfo && user.isLoggedIn()" :to="{name: 'update_character', params: { character_id: 1 }}" active-class="btn-active" class="btn btn-ghost text-base mr-5">
+                    <RouterLink v-if="user.hasPulledUserInfo && user.isLoggedIn()" :to="{ name: 'create_character' }" active-class="btn-active" class="btn btn-ghost text-base mr-5">
                         <CreateIcon />
                         <span>创作</span>
                     </RouterLink>
