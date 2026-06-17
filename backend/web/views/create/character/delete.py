@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from web.models.character import Character
-from utils.profile_image import remove_old_image
+from web.views.utils.profile_image import remove_old_image
 
 
 class DeleteCharacterView(APIView):
