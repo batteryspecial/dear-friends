@@ -18,7 +18,7 @@ const userProfile = ref<UserProfile | null>(null);
 const characters = ref<Character[]>([]);
 
 const isLoading = ref<boolean>(false);
-const hasCharacters = ref<boolean>(false);
+const hasCharacters = ref<boolean>(true);
 
 const route = useRoute();
 const sentinelRef = useTemplateRef<Element>("sentinel-ref")
@@ -37,7 +37,7 @@ async function loadMore(): Promise<void> {
 
     let newCharacters: Character[] = [];
     try {
-        const r = await api.get("/api/create/character/get_list/", { params: {
+        const r = await api.get("/api/create/character/get_many/", { params: {
             items_count: characters.value.length,
             user_id: route.params.user_id,
         }});
@@ -55,7 +55,7 @@ async function loadMore(): Promise<void> {
         } else {
             characters.value.push(...newCharacters);
             await nextTick(); // render, then determine
-            if (sentinelVisible()) await loadMore(); // real recursion!?
+            if (sentinelRef.value && sentinelVisible()) await loadMore(); // real recursion!?
         }
         isLoading.value = false;
         console.log("loading complete")
@@ -82,9 +82,14 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="flex flex-col items-center mb-10">
-        <UserInfoField />
+        <UserInfoField v-if="userProfile" :userProfile="userProfile"/>
         <div class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-9 mt-12 justify-items-center w-full px-9">
-            <CharacterCard />
+            <CharacterCard
+                v-for="c in characters"
+                :key="c.id"
+                :character="c"
+                :canEdit="true"
+            />
         </div>
         <div ref="sentinel-ref" class="h-2 mt-8 w-100 bg-base-200"></div>
         <div v-if="isLoading" class="text-slate-500 mt-5">加载中.&nbsp;&nbsp;.&nbsp;&nbsp;.&nbsp;&nbsp;.</div>
