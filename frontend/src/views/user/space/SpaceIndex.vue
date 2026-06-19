@@ -33,7 +33,6 @@ function sentinelVisible(): boolean {  // 判断哨兵是否能被看到
 async function loadMore(): Promise<void> {
     if (isLoading.value || !hasCharacters.value) return;
     isLoading.value = true;
-    console.log("loading...")
 
     let newCharacters: Character[] = [];
     try {
@@ -50,6 +49,7 @@ async function loadMore(): Promise<void> {
     } catch (err) {
         console.log(err)
     } finally {
+        isLoading.value = false;
         if (newCharacters.length === 0) {
             hasCharacters.value = false;
         } else {
@@ -57,8 +57,6 @@ async function loadMore(): Promise<void> {
             await nextTick(); // render, then determine
             if (sentinelRef.value && sentinelVisible()) await loadMore(); // real recursion!?
         }
-        isLoading.value = false;
-        console.log("loading complete")
     }
 }
 
@@ -68,12 +66,19 @@ onMounted(async () => {
 
     observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) loadMore()
+            if (entry.isIntersecting) {
+                console.log("I see you!")
+                loadMore();
+            }
         })
     }, { root: null, rootMargin: '2px', threshold: 0 });
 
     observer.observe(sentinelRef.value as Element);
 })
+
+async function removeCharacter(characterId: number): Promise<void> {
+    characters.value = characters.value.filter(c => c.id !== characterId)
+}
 
 onBeforeUnmount(() => {
     observer.disconnect();
@@ -89,9 +94,10 @@ onBeforeUnmount(() => {
                 :key="c.id"
                 :character="c"
                 :canEdit="true"
+                @remove="removeCharacter"
             />
         </div>
-        <div ref="sentinel-ref" class="h-2 mt-8 w-100 bg-base-200"></div>
+        <div ref="sentinel-ref" class="h-2 w-100"></div>
         <div v-if="isLoading" class="text-slate-500 mt-5">加载中.&nbsp;&nbsp;.&nbsp;&nbsp;.&nbsp;&nbsp;.</div>
         <div v-else-if="!hasCharacters" class="text-slate-500 mt-5">_______________</div>
     </div>

@@ -18,6 +18,8 @@ class DeleteCharacterView(APIView):
             remove_old_image(character.image)
             remove_old_image(character.bg_image)
 
+            character.delete()
+
             return Response({
                 'result' : 'success',
             }, status=200)
