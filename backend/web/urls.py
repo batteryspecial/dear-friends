@@ -14,8 +14,9 @@ from web.views.create.character.create import CreateCharacterView
 from web.views.create.character.update import UpdateCharacterView
 from web.views.create.character.delete import DeleteCharacterView
 from web.views.create.character.get_character import GetCharacterView
-
 from web.views.create.character.get_many import GetCharacterListView
+
+from web.views.homepage.index import HomepageIndexView
 
 """
 - If frontend and backend urls match -> TemplateNotExist
@@ -35,8 +36,9 @@ urlpatterns = [
     path('api/create/character/update/', UpdateCharacterView.as_view(), name='update_character_view'),
     path('api/create/character/delete/', DeleteCharacterView.as_view(), name='delete_character_view'),
     path('api/create/character/get_character/', GetCharacterView.as_view(), name='get_character_view'),
-
     path('api/create/character/get_many/', GetCharacterListView.as_view(), name='get_many_view'),
+
+    path('api/homepage/index/', HomepageIndexView.as_view(), name='homepage_index_view'),
 
     path('', views.home, name='homepage'),
     re_path(r'^(?!media/|static/|assets/).*$', views.home),

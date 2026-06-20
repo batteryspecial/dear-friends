@@ -19,7 +19,7 @@ const { userProfile: UserProfile } = defineProps(['userProfile'])
       </div>
       <div class="flex flex-col justify-center w-65 h-40">
         <div class="text-2xl font-bold! line-clamp-1 break-all">{{ userProfile.username }}</div>
-        <div class="text-slate-500 ">Friend #{{ userProfile.user_id }}</div>
+        <div class="text-slate-500 ">用户 #{{ userProfile.user_id }}</div>
         <p class="mt-5 h-20 line-clamp-5 break-all">{{ userProfile.bio }}</p>
       </div>
     </div>
