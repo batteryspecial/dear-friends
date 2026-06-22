@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import api from '@/js/http/api';
 
-import { ref, useTemplateRef, nextTick, onMounted, onBeforeUnmount } from 'vue';
+import { ref, watch, useTemplateRef, nextTick, onMounted, onBeforeUnmount } from 'vue';
+import { useRoute } from 'vue-router';
 
 import type { Character } from '../create/CreateIndex.vue';
 import CharacterCard from '@/components/character/CharacterCard.vue';
@@ -11,8 +12,9 @@ type AllCharactersResponse = {
   characters: Character[];
 }
 
-const characters = ref<Character[]>([]);
+const route = useRoute();
 
+const characters = ref<Character[]>([]);
 const isLoading = ref<boolean>(false);
 const hasCharacters = ref<boolean>(true);
 
@@ -31,7 +33,12 @@ async function loadMore(): Promise<void> {
 
     let newCharacters: Character[] = [];
     try {
-        const r = await api.get("/api/homepage/index/", { params: { items_count: characters.value.length }});
+        const r = await api.get("/api/homepage/index/", { 
+            params: { 
+                items_count: characters.value.length,
+                search_query: (typeof route.query.q === "string" ? route.query.q : ''),
+            }
+        });
 
         const data: AllCharactersResponse = r.data;
         if (data.result === "success") {
@@ -67,6 +74,17 @@ async function removeCharacter(characterId: number): Promise<void> {
     characters.value = characters.value.filter(c => c.id !== characterId)
 }
 
+async function reset(): Promise<void> {
+    characters.value = [];
+    isLoading.value = false;
+    hasCharacters.value = true;
+    await loadMore();
+}
+
+watch(() => route.query.q, async () => {
+    await reset();
+})
+
 onBeforeUnmount(() => {
     observer.disconnect();
 })
@@ -79,7 +97,7 @@ onBeforeUnmount(() => {
                 v-for="c in characters"
                 :key="c.id"
                 :character="c"
-                :canEdit="false"
+                :canEdit="true"
                 @remove="removeCharacter"
             />
         </div>

@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-
+from django.db.models import Q
 from web.models.character import Character
 
 import logging
@@ -11,7 +11,13 @@ class HomepageIndexView(APIView):
     def get(self, request: Request):
         try:
             items_count = int(request.query_params.get('items_count', 0))
-            characters_raw = Character.objects.all().order_by('-id')[items_count : items_count + 20]
+            search_query = request.query_params.get('search_query', '')
+            if search_query:
+                queryset = Character.objects.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query))
+            else:
+                queryset = Character.objects.all()
+
+            characters_raw = queryset.order_by('-id')[items_count : items_count + 20]
             characters = []
 
             for c in characters_raw:

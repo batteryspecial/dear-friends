@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import MenuIcon from '@/components/icons/menu.vue'
 import HomeIcon from '@/components/icons/home.vue'
 import UserIcon from '@/components/icons/user.vue'
@@ -6,10 +6,29 @@ import CreateIcon from '@/components/icons/create.vue'
 import SearchIcon from '@/components/icons/search.vue'
 
 import { useUserStore } from '@/stores/user'
-
 import UserMenu from './UserMenu.vue'
 
+import { ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
+
 const user = useUserStore()
+const searchQuery = ref<string>('')
+
+watch(() => route.query.q, next => {
+    searchQuery.value = typeof next === "string" ? (next || '') : '';
+});
+
+function handleSearch() {
+    router.push({ 
+        name: 'homepage_index', 
+        query: {
+            q: searchQuery.value.trim() || undefined,
+        },
+    });
+}
 </script>
 
 <template>
@@ -25,14 +44,14 @@ const user = useUserStore()
                     </label>
                     <div class="px-4 font-bold md:text-lg text-sm">Dear Friend</div>
                 </div>
-                <div class="navbar-center md:justify-center justify-end lg:w-4/5 max-w-150">
-                    <div class="join w-4/5 flex justify-center">
-                        <input class="input outline-none border-none rounded-l-xl w-4/5 join-item" placeholder="搜索你感兴趣的内容" />
-                        <button class="btn btn-vue rounded-r-xl join-item">
+                <div class="navbar-center justify-end sm:me-[5%] md:justify-center lg:w-4/5 ms-5 max-w-150">
+                    <form @submit.prevent="handleSearch" class="join w-full flex justify-center">
+                        <input v-model="searchQuery" class="input outline-none rounded-l-xl w-4/5 join-item" placeholder="搜索你感兴趣的内容" />
+                        <button type="submit" class="btn btn-vue border border-(--vue-base) hover:border-(--vue-compliment) rounded-r-xl join-item">
                             <SearchIcon />
                             <span class="hidden lg:block">搜索</span>
                         </button>
-                    </div>
+                    </form>
                 </div>
                 <div class="navbar-end">
                     <RouterLink v-if="user.hasPulledUserInfo && user.isLoggedIn()" :to="{ name: 'create_character' }" active-class="btn-active" class="btn btn-ghost text-base mr-5">

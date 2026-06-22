@@ -60,7 +60,8 @@ onMounted(async () => {
 
                 <div 
                     v-if="canEdit && user.id === character.author.user_id"
-                    class="absolute right-0 top-0"
+                    class="absolute right-2 top-1 transition-all duration-500"
+                    :class="isHover ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-50'"
                 >
                     <RouterLink 
                         :to="{name: 'update_character', params: { character_id: character.id }}"
