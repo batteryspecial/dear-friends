@@ -15,6 +15,11 @@ export interface Character {
   bg_image: string;
   author: Author;
 }
+
+export interface Friend {
+    id: string;
+    character: Character;
+}
 </script>
 
 <template>

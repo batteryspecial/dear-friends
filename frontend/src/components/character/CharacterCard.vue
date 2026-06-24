@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, useTemplateRef } from 'vue';
 import { FastAverageColor } from "fast-average-color"
-import { type Character } from '@/views/create/CreateIndex.vue';
+import type { Character, Friend } from '@/views/create/CreateIndex.vue';
 import { useUserStore } from '@/stores/user';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import UpdateIcon from '../icons/update.vue';
 import RemoveIcon from '../icons/remove.vue';
 import api from '@/js/http/api.ts';
+import ChatField from './chat_field/ChatField.vue';
 
 const { character, canEdit } = defineProps(['character', 'canEdit']) as { 
     character: Character;
@@ -15,7 +16,27 @@ const { character, canEdit } = defineProps(['character', 'canEdit']) as {
 const emit = defineEmits(["remove"]);
 const isHover = ref<boolean>(false);
 const user = useUserStore();
-const avgColorRef = ref<string>('')
+const router = useRouter();
+const avgColorRef = ref<string>('');
+const chatFieldRef = useTemplateRef("chat-field-ref");
+const friend = ref<Friend | null>(null)
+
+async function openChatField() {
+    if (!user.isLoggedIn()) await router.push({ name: 'user_login' })
+    else {
+        try {
+            const r = await api.post("/api/friend/get_create/", {
+                character_id: character.id
+            })
+            if (r.data.result === "success") {
+                friend.value = r.data.friend;
+                chatFieldRef.value?.showModal()
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
 
 const fac = new FastAverageColor();
 
@@ -53,7 +74,7 @@ onMounted(async () => {
 
 <template>
     <div>
-        <div class="avatar cursor-pointer" @mouseover="isHover=true" @mouseout="isHover=false">
+        <div class="avatar cursor-pointer" @mouseover="isHover=true" @mouseout="isHover=false" @click="openChatField">
             <div class="w-60 h-100 rounded-2xl relative">
                 <img :src="character.bg_image" class="transition-all duration-300" :class="{'brightness-75 scale-105' : isHover}" alt="image" draggable="false">
                 <div class="absolute left-0 top-50 w-60 h-50 bg-linear-to-t from-black/40 to-transparent"></div>
@@ -107,6 +128,7 @@ onMounted(async () => {
                 {{ character.author.username }}
             </div>
         </RouterLink>
+        <ChatField ref="chat-field-ref" :friend="friend" />
     </div>
 </template>
 
