@@ -128,7 +128,7 @@ onMounted(async () => {
                 {{ character.author.username }}
             </div>
         </RouterLink>
-        <ChatField ref="chat-field-ref" :friend="friend" />
+        <ChatField ref="chat-field-ref" :friend="friend" :color="avgColorRef" />
     </div>
 </template>
 
