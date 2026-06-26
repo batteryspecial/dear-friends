@@ -9,9 +9,11 @@ import RemoveIcon from '../icons/remove.vue';
 import api from '@/js/http/api.ts';
 import ChatField from './chat_field/ChatField.vue';
 
-const { character, canEdit } = defineProps(['character', 'canEdit']) as { 
+const props = defineProps(['character', 'canEdit', 'canRemoveFriend', 'friend']) as { 
     character: Character;
     canEdit: boolean;
+    canRemoveFriend: boolean;
+    friend: Friend;
 };
 const emit = defineEmits(["remove"]);
 const isHover = ref<boolean>(false);
@@ -26,7 +28,7 @@ async function openChatField() {
     else {
         try {
             const r = await api.post("/api/friend/get_create/", {
-                character_id: character.id
+                character_id: props.character.id
             })
             if (r.data.result === "success") {
                 friend.value = r.data.friend;
@@ -46,10 +48,28 @@ async function handleRemoveCharacter() {
 
     try {
         const r = await api.post("/api/create/character/delete/", {
-            character_id: character.id,
+            character_id: props.character.id,
         });
         if (r.data.result === "success") {
-            emit("remove", character.id);
+            emit("remove", props.character.id);
+        } else {
+            console.log(r.data.result)
+        }
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+async function handleRemoveFriend() {
+    const isConfirmed = window.confirm("你确定要删除这位好友吗？\n数据会被永久消除。");
+    if (!isConfirmed) return
+
+    try {
+        const r = await api.post("/api/friend/delete/", {
+            friend_id: props.friend.id,
+        });
+        if (r.data.result === "success") {
+            emit("remove", props.friend.id);
         } else {
             console.log(r.data.result)
         }
@@ -59,8 +79,8 @@ async function handleRemoveCharacter() {
 }
 
 onMounted(async () => {
-    if (character.image) {
-        fac.getColorAsync(character.image, { crossOrigin: "anonymous" })
+    if (props.character.image) {
+        fac.getColorAsync(props.character.image, { crossOrigin: "anonymous" })
         .then(color => {
             avgColorRef.value = color.hex;
         })
@@ -80,17 +100,28 @@ onMounted(async () => {
                 <div class="absolute left-0 top-50 w-60 h-50 bg-linear-to-t from-black/40 to-transparent"></div>
 
                 <div 
-                    v-if="canEdit && user.id === character.author.user_id"
+                    v-if="props.canEdit && user.id === props.character.author.user_id"
                     class="absolute right-2 top-1 transition-all duration-500"
                     :class="isHover ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-50'"
                 >
                     <RouterLink 
-                        :to="{name: 'update_character', params: { character_id: character.id }}"
+                        :to="{name: 'update_character', params: { character_id: props.character.id }}"
                         class="btn btn-circle btn-ghost"
+                        @click.stop
                     >
                         <UpdateIcon />
                     </RouterLink>
-                    <button @click="handleRemoveCharacter" class="btn btn-circle btn-ghost hover:bg-red-500/40">
+                    <button @click.stop="handleRemoveCharacter" class="btn btn-circle btn-ghost hover:bg-red-500/40">
+                        <RemoveIcon />
+                    </button>
+                </div>
+
+                <div 
+                    v-if="props.canRemoveFriend"
+                    class="absolute right-2 top-1 transition-all duration-500"
+                    :class="isHover ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-50'"
+                >
+                    <button @click.stop="handleRemoveFriend" class="btn btn-circle btn-ghost hover:bg-red-500/40">
                         <RemoveIcon />
                     </button>
                 </div>

@@ -44,7 +44,7 @@ urlpatterns = [
 
     path('api/homepage/index/', HomepageIndexView.as_view(), name='homepage_index_view'),
 
-    path('api/friend/remove/', RemoveFriendView.as_view(), name='remove_friend_view'),
+    path('api/friend/delete/', RemoveFriendView.as_view(), name='delete_friend_view'),
     path('api/friend/get_list/', GetFriendListView.as_view(), name='get_friend_list_view'),
     path('api/friend/get_create/', GetOrCreateFriendView.as_view(), name='get_or_create_friend_view'),
 

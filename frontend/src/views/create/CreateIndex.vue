@@ -17,7 +17,7 @@ export interface Character {
 }
 
 export interface Friend {
-    id: string;
+    id: number;
     character: Character;
 }
 </script>

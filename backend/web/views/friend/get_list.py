@@ -25,7 +25,7 @@ class GetFriendListView(APIView):
                     "character" : {
                         "id" : character.id,
                         "name" : character.name,
-                        "bio" : character.desc,
+                        "desc" : character.desc,
                         "image" : character.image.url,
                         "bg_image" : character.bg_image.url,
                         "author" : {
