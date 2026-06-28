@@ -22,6 +22,8 @@ from web.views.friend.remove import RemoveFriendView
 from web.views.friend.get_list import GetFriendListView
 from web.views.friend.get_or_create import GetOrCreateFriendView
 
+from web.views.friend.message.chat.chat import MesssageChatView
+
 """
 - If frontend and backend urls match -> TemplateNotExist
 - Django will try loading using its own urls first
@@ -47,6 +49,8 @@ urlpatterns = [
     path('api/friend/delete/', RemoveFriendView.as_view(), name='delete_friend_view'),
     path('api/friend/get_list/', GetFriendListView.as_view(), name='get_friend_list_view'),
     path('api/friend/get_create/', GetOrCreateFriendView.as_view(), name='get_or_create_friend_view'),
+
+    path('api/friend/message/chat/', MesssageChatView.as_view(), name='message_chat_view'),
 
     path('', views.home, name='homepage'),
     re_path(r'^(?!media/|static/|assets/).*$', views.home),
