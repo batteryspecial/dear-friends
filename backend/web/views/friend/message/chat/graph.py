@@ -23,8 +23,10 @@ class ChatGraph:
     def create_app():
         # https://reference.langchain.com/python/langchain-anthropic/chat_models/ChatAnthropic
         llm = ChatAnthropic(
-            model_name="claude-3-5-haiku-20241022",
-            api_key=os.getenv("CLAUDE_API_KEY")
+            model_name="claude-haiku-4-5-20251001",
+            api_key=os.getenv("CLAUDE_API_KEY"),
+            streaming=True,
+            stream_usage=True,
         )
 
         def model_call(state: AgentState) -> AgentState:

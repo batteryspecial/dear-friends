@@ -10,7 +10,7 @@ const props = defineProps(["character"]) as { character: Character }
                 <img :src="props.character.image" alt="头像">
             </div>
         </div>
-        <div class="text-black dark:text-white line-clamp-1 break-all">{{ character.name }}</div>
+        <div class="text-white line-clamp-1 break-all">{{ character.name }}</div>
     </div>
 </template>
 
