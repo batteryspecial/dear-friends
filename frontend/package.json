@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently -n frontend,backend -c blue,green \"vite\" \"cd ../backend && ../.venv/bin/python manage.py runserver\"",
+    "dev:frontend": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -26,6 +27,7 @@
     "@types/node": "^25.9.3",
     "@vitejs/plugin-vue": "^6.0.7",
     "@vue/tsconfig": "^0.9.1",
+    "concurrently": "^10.0.3",
     "daisyui": "^5.5.23",
     "npm-run-all2": "^9.0.2",
     "tailwindcss": "^4.3.1",
