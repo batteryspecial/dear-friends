@@ -23,6 +23,7 @@ from web.views.friend.get_list import GetFriendListView
 from web.views.friend.get_or_create import GetOrCreateFriendView
 
 from web.views.friend.message.chat.chat import MesssageChatView
+from web.views.friend.message.get_history import GetChatHistoryView
 
 """
 - If frontend and backend urls match -> TemplateNotExist
@@ -51,6 +52,7 @@ urlpatterns = [
     path('api/friend/get_create/', GetOrCreateFriendView.as_view(), name='get_or_create_friend_view'),
 
     path('api/friend/message/chat/', MesssageChatView.as_view(), name='message_chat_view'),
+    path('api/friend/message/get_history/', GetChatHistoryView.as_view(), name='get_history_view'),
 
     path('', views.home, name='homepage'),
     re_path(r'^(?!media/|static/|assets/).*$', views.home),
