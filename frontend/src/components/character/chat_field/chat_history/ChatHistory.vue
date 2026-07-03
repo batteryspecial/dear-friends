@@ -117,7 +117,7 @@ defineExpose({
 
 <template>
     <div ref="scroll-ref" class="absolute top-14 left-0 w-90 h-120 overflow-y-scroll">
-        <div ref="sentinel-ref" class="h-2 bg-red-500"></div>
+        <div ref="sentinel-ref" class="h-2 hidden"></div>
         <ChatMessage 
             v-for="m in history"
             :key="m.id"
