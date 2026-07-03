@@ -3,6 +3,15 @@ import type { Friend } from '@/views/create/CreateIndex.vue';
 import { useTemplateRef, computed, ref, nextTick } from 'vue';
 import InputField from './input_field/InputField.vue';
 import CharacterImageField from './image_field/CharacterImageField.vue';
+import ChatHistory from './chat_history/ChatHistory.vue';
+
+export interface Message {
+    id: string;
+    role: string;
+    content: string;
+    pending: boolean;
+    createdAt: string;
+}
 
 const { friend, color } = defineProps(["friend", "color"]) as {
     friend: Friend,
@@ -10,13 +19,34 @@ const { friend, color } = defineProps(["friend", "color"]) as {
 }
 const modalRef = useTemplateRef("modal-ref")
 const inputFieldRef = useTemplateRef("input-field-ref")
-const opened = ref(false)
+const chatHistoryRef = useTemplateRef("chat-history-ref");
+const opened = ref(false);
+const history = ref<Message[]>([]);
 
 async function showModal() {
     modalRef.value?.showModal();
     await nextTick();
     inputFieldRef.value?.focusChatInput();
     requestAnimationFrame(() => { opened.value = true })
+}
+
+function handlePushMessage(msg: Message): void {
+    history.value.push(msg);
+    chatHistoryRef.value?.followOutput();
+}
+function handlePushFrontMessage(msg: Message): void {
+    history.value.unshift(msg);
+}
+
+function handleAppendLastMessage(delta: string): void {
+    const last_message = history.value.at(-1);
+    if (last_message) last_message.content += delta;
+    chatHistoryRef.value?.followOutput();
+}
+
+function handleCompleteLastMessage(): void {
+    const last_message = history.value.at(-1);
+    if (last_message) last_message.pending = false;
 }
 
 const bgStyle = computed(() => {
@@ -39,8 +69,27 @@ defineExpose({
             <form method="dialog" class="absolute top-0 right-0 z-10">
                 <button class="btn btn-md btn-circle btn-ghost absolute right-2 top-2">✕</button>
             </form>
-            <InputField v-if="friend" :color="color" :friendId="friend.id" ref="input-field-ref" />
-            <CharacterImageField v-if="friend" :character="friend.character" />
+            <ChatHistory
+                ref="chat-history-ref"
+                v-if="friend"
+                :history="history"
+                :friendId="friend.id"
+                :character="friend.character"
+                @pushFrontMessage="handlePushFrontMessage"
+            />
+            <InputField
+                v-if="friend" 
+                :color="color" 
+                :friendId="friend.id" 
+                ref="input-field-ref" 
+                @pushMessage="handlePushMessage"
+                @appendLastMessage="handleAppendLastMessage"
+                @completeLastMessage="handleCompleteLastMessage"
+            />
+            <CharacterImageField
+                v-if="friend" 
+                :character="friend.character"
+            />
         </div>
     </dialog>
 </template>

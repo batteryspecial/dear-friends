@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import MicIcon from '@/components/icons/mic.vue';
 import SendIcon from '@/components/icons/send.vue';
-import api from '@/js/http/api'; 
 import stream from '@/js/http/streaming';
 import { ref, useTemplateRef } from 'vue';
 
@@ -9,6 +8,7 @@ const { color, friendId } = defineProps(["color", "friendId"]) as {
     color: string,
     friendId: number,
 }
+const emit = defineEmits(['pushMessage', 'appendLastMessage', 'completeLastMessage'])
 const message = ref<string>('')
 const isProcessing = ref<boolean>(false)
 const chatInputRef = useTemplateRef("chat-input-ref")
@@ -22,6 +22,10 @@ async function handleSend(): Promise<void> {
     if (!content) return;
     message.value = "";
 
+    const now = new Date().toISOString();
+    emit("pushMessage", { role: "user", content: content, id: crypto.randomUUID(), pending: false, createdAt: now });
+    emit("pushMessage", { role: "ai", content: '', id: crypto.randomUUID(), pending: true, createdAt: now });
+
     try {
         await stream('/api/friend/message/chat/', {
             body: {
@@ -29,8 +33,12 @@ async function handleSend(): Promise<void> {
                 message: content
             },
             onmessage(data, isDone) {
-                if (isDone) isProcessing.value = false
-                else if (typeof data === "object" && data) console.log(data.content)
+                if (isDone) {
+                    isProcessing.value = false
+                    emit("completeLastMessage");
+                } else if (typeof data === "object" && data.content) {
+                    emit("appendLastMessage", data.content);
+                }
             },
             onerror(err) {
                 console.log(err)
@@ -53,7 +61,7 @@ defineExpose({
         <input
             ref="chat-input-ref"
             v-model="message"
-            class="input w-full pr-17 rounded-2xl bg-black/30 backdrop-blur-sm border !border-[color:var(--avg-color)] text-white text-base"
+            class="input w-full pr-17 whitespace-pre-wrap break-words rounded-2xl bg-black/30 backdrop-blur-sm border !border-[color:var(--avg-color)] text-white text-base"
             :style="{ '--avg-color': color }"
             type="text"
             placeholder="文本输入..."

@@ -1,7 +1,7 @@
 import os
 
 from langchain_core.messages import BaseMessage
-from langchain_anthropic import ChatAnthropic
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import add_messages, StateGraph
 from langgraph.constants import START, END
 from typing import (
@@ -21,12 +21,11 @@ class ChatGraph:
     """
     @staticmethod
     def create_app():
-        # https://reference.langchain.com/python/langchain-anthropic/chat_models/ChatAnthropic
-        llm = ChatAnthropic(
-            model_name="claude-haiku-4-5-20251001",
-            api_key=os.getenv("CLAUDE_API_KEY"),
-            streaming=True,
-            stream_usage=True,
+        # https://reference.langchain.com/python/langchain-google-genai/chat_models/ChatGoogleGenerativeAI
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-2.5-flash",
+            google_api_key=os.getenv("GEMINI_API_KEY"),
+            thinking_budget=0,
         )
 
         def model_call(state: AgentState) -> AgentState:

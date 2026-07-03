@@ -67,7 +67,7 @@ onMounted(async () => {
     observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                console.log("I see you!")
+                // console.log("I see you!")
                 loadMore();
             }
         })

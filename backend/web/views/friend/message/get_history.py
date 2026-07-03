@@ -14,7 +14,7 @@ class GetChatHistoryView(APIView):
         try:
             last_message_id = int(request.query_params.get('last_message_id'))
             friend_id = request.query_params.get('friend_id')
-            queryset = Message.user_message.filter(friend_id=friend_id, friend__me__user=request.user)
+            queryset = Message.objects.filter(friend_id=friend_id, friend__me__user=request.user)
             
             if (last_message_id > 0):
                 queryset = queryset.filter(pk__lt=last_message_id)
@@ -26,6 +26,7 @@ class GetChatHistoryView(APIView):
                     'id': m.id,
                     'user_message': m.user_message,
                     'output': m.output,
+                    'created_at': m.created_at.isoformat(),
                 })
             return Response({ 'result' : 'success', 'messages' : messages }, status=200)
         except Exception as e:

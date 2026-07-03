@@ -51,7 +51,9 @@ class MesssageChatView(APIView):
                             full_output += msg.content
                             yield f"data: {json.dumps({"content" : msg.content}, ensure_ascii=False)}\n\n"
                         if hasattr(msg, "usage_metadata") and msg.usage_metadata:
-                            full_usage = msg.usage_metadata
+                            # Gemini streams usage as per-chunk deltas, so sum them
+                            for k in ("input_tokens", "output_tokens", "total_tokens"):
+                                full_usage[k] = full_usage.get(k, 0) + msg.usage_metadata.get(k, 0)
                 yield "data: [DONE]\n\n"
                 input_tokens = full_usage.get("input_tokens", 0)
                 output_tokens = full_usage.get("output_tokens", 0)
@@ -61,7 +63,7 @@ class MesssageChatView(APIView):
                     friend=friend,
                     user_message=message[:500],
                     inputs=json.dumps([m.model_dump() for m in inputs["messages"]], ensure_ascii=False),
-                    output=full_output[:1000],
+                    output=full_output,
                     input_tokens=input_tokens,
                     output_tokens=output_tokens,
                     total_tokens=total_tokens
