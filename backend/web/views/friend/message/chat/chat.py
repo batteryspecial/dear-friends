@@ -1,4 +1,6 @@
 from django.http import StreamingHttpResponse
+from django.db.models import Subquery
+from pprint import pprint
 
 from rest_framework.views import APIView
 from rest_framework.request import Request
@@ -6,9 +8,9 @@ from rest_framework.response import Response
 from rest_framework.renderers import BaseRenderer
 from rest_framework.permissions import IsAuthenticated
 
-from langchain_core.messages import HumanMessage, BaseMessage
+from langchain_core.messages import HumanMessage, AIMessage, BaseMessage, SystemMessage
 
-from web.models.friend import Friend, Message
+from web.models.friend import Friend, Message, SystemPrompt
 from web.views.friend.message.chat.graph import ChatGraph
 
 import json
@@ -21,6 +23,26 @@ class SSERenderer(BaseRenderer):
     format = "txt"
     def render(self, data, accepted_media_type=None, renderer_context=None):
         return data
+
+def add_system_prompt(state, friend: Friend):
+    msgs = state['messages']
+    system_prompts = SystemPrompt.objects.filter(title='回复').order_by('order_number')
+    prompt = ''
+    for sp in system_prompts:
+        prompt += sp.prompt
+    prompt += f'\n【角色性格】\n {friend.character.desc}\n'
+    return {"messages" : [SystemMessage(prompt)] + msgs}
+    
+def add_recent_messages(state, friend: Friend):
+    msgs = state['messages']
+    latest_message_ids = Message.objects.filter(friend=friend).order_by('-id')[:10].values('id')
+    messages_raw = list(Message.objects.filter(id__in=Subquery(latest_message_ids)).order_by('id'))
+    messages = []
+    for m in messages_raw:
+        messages.append(HumanMessage(m.user_message))
+        messages.append(AIMessage(m.output))
+    
+    return {"messages" : msgs[:1] + messages + msgs[-1:]}
 
 class MesssageChatView(APIView):
     permission_classes = [IsAuthenticated]
@@ -41,6 +63,9 @@ class MesssageChatView(APIView):
             inputs = {
                 "messages" : [HumanMessage(content=message)],
             }
+            inputs = add_system_prompt(inputs, friend)
+            inputs = add_recent_messages(inputs, friend)
+            # pprint(inputs)
 
             def event_stream():
                 full_output = ''

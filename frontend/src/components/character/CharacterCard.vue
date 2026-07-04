@@ -139,9 +139,9 @@ onMounted(async () => {
                         class="grid transition-all duration-500 ease-out"
                         :class="isHover ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
                     >
-                        <div class="overflow-hidden">
-                            <div class="text-white text-lg font-bold">{{ character.name }}</div>
-                            <p class="text-white mt-1">
+                        <div class="overflow-hidden pe-5">
+                            <div class="text-white text-lg font-bold line-clamp-1 break-all">{{ character.name }}</div>
+                            <p class="text-white mt-1 line-clamp-2">
                                 {{ character.desc }}
                             </p>
                         </div>
