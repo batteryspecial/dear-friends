@@ -63,8 +63,9 @@ async function loadMore(): Promise<void> {
         if (oldMessages.length === 0) {
             moreMessages = false;
         } else {
-            const oldHeight = scrollRef.value?.scrollHeight;
-            const oldTop = scrollRef.value?.scrollTop;
+            const viewport = scrollRef.value;
+            const oldHeight = viewport?.scrollHeight ?? 0;
+            const oldTop = viewport?.scrollTop ?? 0;
 
             for (const msg of oldMessages) {
                 emits("pushFrontMessage", {
@@ -84,10 +85,8 @@ async function loadMore(): Promise<void> {
                 lastMessageId = msg.id;
             }
             await nextTick();
-            const newHeight = scrollRef.value?.scrollHeight;
-            const viewport = scrollRef.value;
-
-            if (viewport && oldTop && newHeight && oldHeight) viewport.scrollTop = oldTop + newHeight - oldHeight;
+            // keep the same content on screen after prepending older messages
+            if (viewport) viewport.scrollTop = oldTop + viewport.scrollHeight - oldHeight;
             if (sentinelVisible()) await loadMore();
         }
     }
@@ -96,6 +95,7 @@ async function loadMore(): Promise<void> {
 let observer: IntersectionObserver;
 onMounted(async () => {
     await loadMore();
+    await followOutput();
 
     observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
@@ -117,13 +117,15 @@ defineExpose({
 
 <template>
     <div ref="scroll-ref" class="absolute top-14 left-0 w-90 h-120 overflow-y-scroll">
-        <div ref="sentinel-ref" class="h-2 hidden"></div>
-        <ChatMessage 
+        <!-- sentinel must NOT be display:none (`hidden`) — IntersectionObserver
+             never fires on display:none elements. Transparent is invisible enough. -->
+        <div ref="sentinel-ref" class="h-2"></div>
+        <ChatMessage
             v-for="m in history"
             :key="m.id"
             :message="m"
             :character="character"
-            class="flex-1 min-h-0" 
+            class="flex-1 min-h-0"
         />
     </div>
 </template>
