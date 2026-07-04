@@ -117,9 +117,7 @@ defineExpose({
 
 <template>
     <div ref="scroll-ref" class="absolute top-14 left-0 w-90 h-120 overflow-y-scroll">
-        <!-- sentinel must NOT be display:none (`hidden`) — IntersectionObserver
-             never fires on display:none elements. Transparent is invisible enough. -->
-        <div ref="sentinel-ref" class="h-2"></div>
+        <div ref="sentinel-ref" class="h-1 hidden"></div>
         <ChatMessage
             v-for="m in history"
             :key="m.id"
