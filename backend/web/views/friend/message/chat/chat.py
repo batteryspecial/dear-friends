@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from langchain_core.messages import HumanMessage, AIMessage, BaseMessage, SystemMessage
 
+from web.views.friend.message.memory.update import update_memory
 from web.models.friend import Friend, Message, SystemPrompt
 from web.views.friend.message.chat.graph import ChatGraph
 
@@ -30,7 +31,8 @@ def add_system_prompt(state, friend: Friend):
     prompt = ''
     for sp in system_prompts:
         prompt += sp.prompt
-    prompt += f'\n【角色性格】\n {friend.character.desc}\n'
+    prompt += f'\n【角色性格】\n{friend.character.desc}\n'
+    prompt += f'\n【长期记忆】\n{friend.memory}\n'
     return {"messages" : [SystemMessage(prompt)] + msgs}
     
 def add_recent_messages(state, friend: Friend):
@@ -93,6 +95,9 @@ class MesssageChatView(APIView):
                     output_tokens=output_tokens,
                     total_tokens=total_tokens
                 )
+
+                if Message.objects.filter(friend=friend).count() % 10 == 0: # change to 10 in prod
+                    update_memory(friend)
             
             response = StreamingHttpResponse(event_stream(), content_type="text/event-stream")
             response['Cache-control'] = "no-cache"
