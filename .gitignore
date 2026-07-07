@@ -14,6 +14,7 @@ frontend/.next/
 
 # production
 backend/**/__pycache__
+backend/web/documents/
 
 # misc
 .DS_Store
