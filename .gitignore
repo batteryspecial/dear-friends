@@ -14,7 +14,8 @@ frontend/.next/
 
 # production
 backend/**/__pycache__
-backend/web/documents/
+backend/web/documents/data.md
+backend/web/documents/lancedb_storage/
 
 # misc
 .DS_Store
