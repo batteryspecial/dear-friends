@@ -73,7 +73,7 @@ class MesssageChatView(APIView):
                 full_output = ''
                 full_usage = {}
                 for msg, metadata in app.stream(inputs, stream_mode="messages"):
-                    if isinstance(msg, BaseMessage):
+                    if isinstance(msg, AIMessage):
                         if msg.content:
                             full_output += msg.content
                             yield f"data: {json.dumps({"content" : msg.content}, ensure_ascii=False)}\n\n"
