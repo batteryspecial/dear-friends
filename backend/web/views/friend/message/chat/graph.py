@@ -36,7 +36,7 @@ class ChatGraph:
             查询当前的精确时间，返回格式为：年-月-日 时:分:秒
             :return str
             """
-            print("\033[1m" + "get_time() tool has been used!" + "\033[0m")
+            # print("\033[1m" + "get_time() tool has been used!" + "\033[0m")
             return localtime(now()).strftime('%Y-%m-%d %H:%M:%S')
 
         @tool

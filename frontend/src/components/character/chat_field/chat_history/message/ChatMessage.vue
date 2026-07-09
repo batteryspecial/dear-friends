@@ -33,7 +33,7 @@ const messageTime = computed(() => new Date(message.createdAt).toLocaleTimeStrin
             {{ character.name }}
             <time class="text-xs opacity-50">{{ messageTime }}</time>
         </div>
-        <div class="chat-bubble prose prose-sm prose-invert max-w-none" v-html="renderedContent"></div>
+        <div class="chat-bubble prose prose-sm prose-invert max-w-none break-all" v-html="renderedContent"></div>
         <div v-if="!message.pending" class="chat-footer opacity-50">Delivered</div>
     </div>
     <div v-else class="chat chat-end text-white">
@@ -49,7 +49,7 @@ const messageTime = computed(() => new Date(message.createdAt).toLocaleTimeStrin
             {{ user.username }}
             <time class="text-xs opacity-50">{{ messageTime }}</time>
         </div>
-        <div class="chat-bubble chat-bubble-success whitespace-pre-wrap">{{ message.content }}</div>
+        <div class="chat-bubble chat-bubble-success whitespace-pre-wrap break-all">{{ message.content }}</div>
         <div class="chat-footer opacity-50">{{ messageTime }}</div>
     </div>
 </template>
