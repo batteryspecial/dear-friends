@@ -22,6 +22,9 @@ async function handleSend(): Promise<void> {
     if (!content) return;
     message.value = "";
 
+    if (isProcessing.value) return
+    isProcessing.value = true;
+
     const now = new Date().toISOString();
     emit("pushMessage", { role: "user", content: content, id: crypto.randomUUID(), pending: false, createdAt: now });
     emit("pushMessage", { role: "ai", content: '', id: crypto.randomUUID(), pending: true, createdAt: now });
