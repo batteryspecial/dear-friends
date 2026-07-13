@@ -49,6 +49,11 @@ function handleCompleteLastMessage(): void {
     if (last_message) last_message.pending = false;
 }
 
+function handleClose() {
+    modalRef.value?.close();
+    inputFieldRef.value?.close();
+}
+
 const bgStyle = computed(() => {
     return friend ? { backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.25)), url(${friend.character.bg_image})` } : {}
 })
@@ -66,7 +71,7 @@ defineExpose({
                 :class="opened ? 'blur-xs scale-105' : 'blur-none scale-100'"
                 :style="bgStyle"
             ></div>
-            <form method="dialog" class="absolute top-0 right-0 z-10">
+            <form @submit="handleClose" method="dialog" class="absolute top-0 right-0 z-10">
                 <button class="btn btn-md btn-circle btn-ghost absolute right-2 top-2">✕</button>
             </form>
             <ChatHistory

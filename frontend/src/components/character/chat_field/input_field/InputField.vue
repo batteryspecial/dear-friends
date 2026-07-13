@@ -3,6 +3,7 @@ import MicIcon from '@/components/icons/mic.vue';
 import SendIcon from '@/components/icons/send.vue';
 import stream from '@/js/http/streaming';
 import { ref, useTemplateRef } from 'vue';
+import Microphone from './Microphone.vue';
 
 const { color, friendId } = defineProps(["color", "friendId"]) as {
     color: string,
@@ -10,20 +11,33 @@ const { color, friendId } = defineProps(["color", "friendId"]) as {
 }
 const emit = defineEmits(['pushMessage', 'appendLastMessage', 'completeLastMessage'])
 const message = ref<string>('')
-const isProcessing = ref<boolean>(false)
+const showMic = ref<boolean>(false)
 const chatInputRef = useTemplateRef("chat-input-ref")
+const processId = ref<number>(0);
 
 function focusChatInput() {
     chatInputRef.value?.focus();
 }
 
-async function handleSend(): Promise<void> {
-    const content = message.value.trim()
-    if (!content) return;
-    message.value = "";
+function close() {
+    processId.value++;
+    showMic.value = false;
+}
+function handleStop() {
+    processId.value++;
+}
 
-    if (isProcessing.value) return
-    isProcessing.value = true;
+async function handleSend(event: Event, audio_msg?: string): Promise<void> {
+    let content: string | null = null;
+    if (audio_msg) {
+        content = audio_msg.trim()
+    } else {
+        content = message.value.trim()
+    }
+    if (!content) return;
+    
+    message.value = "";
+    const currentId = ++processId.value;
 
     const now = new Date().toISOString();
     emit("pushMessage", { role: "user", content: content, id: crypto.randomUUID(), pending: false, createdAt: now });
@@ -36,8 +50,9 @@ async function handleSend(): Promise<void> {
                 message: content
             },
             onmessage(data, isDone) {
+                if (currentId !== processId.value) return
+
                 if (isDone) {
-                    isProcessing.value = false
                     emit("completeLastMessage");
                 } else if (typeof data === "object" && data.content) {
                     emit("appendLastMessage", data.content);
@@ -45,22 +60,21 @@ async function handleSend(): Promise<void> {
             },
             onerror(err) {
                 console.log(err)
-                isProcessing.value = false
             }
         })
     } catch (err) {
         console.log(err)
-        isProcessing.value = false
     }
 }
 
 defineExpose({
     focusChatInput,
+    close
 })
 </script>
 
 <template>
-    <form @submit.prevent="handleSend" class="absolute bottom-4 left-2 h-12 w-86 flex items-center">
+    <form v-if="!showMic" @submit.prevent="handleSend" class="absolute bottom-4 left-2 h-12 w-86 flex items-center">
         <input
             ref="chat-input-ref"
             v-model="message"
@@ -69,13 +83,21 @@ defineExpose({
             type="text"
             placeholder="文本输入..."
         >
-        <div class="absolute right-2 w-8 h-8 flex justify-center items-center cursor-pointer">
+        <div class="absolute right-10 w-8 h-8 flex justify-center items-center cursor-pointer">
             <SendIcon @click="handleSend" class="stroke-white hover:stroke-[color-mix(in_srgb,var(--avg-color)_50%,white)] transition-colors duration-300" :style="{ '--avg-color': color }" />
         </div>
-        <div class="absolute right-9 w-8 h-8 flex justify-center items-center cursor-pointer">
+        <div @click="showMic = true" class="absolute right-2 w-8 h-8 flex justify-center items-center cursor-pointer">
             <MicIcon class="stroke-white hover:stroke-[color-mix(in_srgb,var(--avg-color)_50%,white)] transition-colors duration-300" :style="{ '--avg-color': color }" />
         </div>
+        
     </form>
+    <Microphone 
+        v-else 
+        @close="showMic = false" 
+        @send="handleSend"
+        @stop="handleStop"
+        :color="color" 
+    />
 </template>
 
 <style scoped>

@@ -49,7 +49,7 @@ const messageTime = computed(() => new Date(message.createdAt).toLocaleTimeStrin
             {{ user.username }}
             <time class="text-xs opacity-50">{{ messageTime }}</time>
         </div>
-        <div class="chat-bubble chat-bubble-success whitespace-pre-wrap break-all">{{ message.content }}</div>
+        <div class="chat-bubble chat-bubble-success whitespace-pre-wrap">{{ message.content }}</div>
         <div class="chat-footer opacity-50">{{ messageTime }}</div>
     </div>
 </template>
