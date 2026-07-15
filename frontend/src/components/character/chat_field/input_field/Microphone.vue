@@ -5,6 +5,11 @@ import { MicVAD } from '@ricky0123/vad-web';
 import { float32ToInt16 } from '@/utils/audio';
 import api from '@/js/http/api';
 
+type ASRProcessingResponse = {
+    result: string;
+    text: string;
+};
+
 const isSpeaking = ref<boolean>(false);
 
 const emit = defineEmits(['close', 'send', 'stop']);
@@ -48,9 +53,9 @@ const sendToBackend = async (arrayBuffer: ArrayBuffer): Promise<void> => {
     formData.append("audio", blob, "voice.pcm");
 
     try {
-        const r = await api.post('', formData)
-        const data = r.data;
-
+        const r = await api.post('/api/friend/message/asr/asr/', formData)
+        const data: ASRProcessingResponse = r.data;
+        console.log(data)
         if (data.result === 'success') {
             emit("send", null, data.text)
         }

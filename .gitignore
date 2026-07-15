@@ -21,6 +21,7 @@ backend/web/documents/lancedb_storage/
 # misc
 .DS_Store
 *.pem
+.claude/
 
 # debug
 npm-debug.log*
