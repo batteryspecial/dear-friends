@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 
 class ASRModelView(APIView):
     """
-    A specialized version of asr.py designed to call the Aliyun's Gummy ASR model.
+    A specialized version of asr.py designed to call Aliyun's Gummy ASR model.
 
-    :doc: https://bailian.console.aliyun.com/cn-beijing/?spm=5176.12818093_47.console-base_product-drawer-right.dproducts-and-services-sfm.258b16d0dZyCzu&tab=api#/api/?type=model&url=2869339
+    :doc https://bailian.console.aliyun.com/cn-beijing/?spm=5176.12818093_47.console-base_product-drawer-right.dproducts-and-services-sfm.258b16d0dZyCzu&tab=api#/api/?type=model&url=2869339
     """
     permission_classes = [IsAuthenticated]
 

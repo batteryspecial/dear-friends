@@ -55,7 +55,6 @@ const sendToBackend = async (arrayBuffer: ArrayBuffer): Promise<void> => {
     try {
         const r = await api.post('/api/friend/message/asr/asr/', formData)
         const data: ASRProcessingResponse = r.data;
-        console.log(data)
         if (data.result === 'success') {
             emit("send", null, data.text)
         }
