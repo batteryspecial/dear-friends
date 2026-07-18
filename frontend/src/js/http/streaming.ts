@@ -14,6 +14,7 @@ const BASE_URL = 'http://127.0.0.1:8000'
 
 export type StreamMessagePayload = {
     content?: string;
+    audio?: string;
     [key: string]: any;
 }
 

@@ -182,7 +182,7 @@ class MesssageChatView(APIView):
         full_usage = {}
         while True:
             msg = mq.get()
-            print(msg)
+            # print(msg)
             if not msg:
                 break
             if msg.get('content', None):

@@ -2,30 +2,27 @@
 import MicIcon from '@/components/icons/mic.vue';
 import SendIcon from '@/components/icons/send.vue';
 import stream from '@/js/http/streaming';
-import { ref, useTemplateRef } from 'vue';
+import { onUnmounted, ref, useTemplateRef } from 'vue';
 import Microphone from './Microphone.vue';
+import { teardownAudio, stopAudio, handleAudioChunk, initAudioStream } from '@/js/utils/audio.ts';
 
 const { color, friendId } = defineProps(["color", "friendId"]) as {
     color: string,
     friendId: number,
 }
 const emit = defineEmits(['pushMessage', 'appendLastMessage', 'completeLastMessage'])
-const message = ref<string>('')
-const showMic = ref<boolean>(false)
 const chatInputRef = useTemplateRef("chat-input-ref")
 const processId = ref<number>(0);
+const showMic = ref<boolean>(false);
+const message = ref<string>('');
 
-function focusChatInput() {
-    chatInputRef.value?.focus();
-}
+onUnmounted(() => {
+    teardownAudio();
+});
 
-function close() {
-    processId.value++;
-    showMic.value = false;
-}
-function handleStop() {
-    processId.value++;
-}
+function handleStop() { processId.value++; stopAudio(); }
+function focusChatInput() { chatInputRef.value?.focus(); }
+function close() { processId.value++; showMic.value = false; stopAudio(); }
 
 async function handleSend(event: Event, audio_msg?: string): Promise<void> {
     let content: string | null = null;
@@ -35,6 +32,8 @@ async function handleSend(event: Event, audio_msg?: string): Promise<void> {
         content = message.value.trim()
     }
     if (!content) return;
+
+    initAudioStream(); // 初始化一个音频播放器 
     
     message.value = "";
     const currentId = ++processId.value;
@@ -51,11 +50,15 @@ async function handleSend(event: Event, audio_msg?: string): Promise<void> {
             },
             onmessage(data, isDone) {
                 if (currentId !== processId.value) return
-
                 if (isDone) {
                     emit("completeLastMessage");
-                } else if (typeof data === "object" && data.content) {
+                }
+                if (typeof data !== "object") return    
+                if (data.content) {
                     emit("appendLastMessage", data.content);
+                }
+                if (data.audio) {
+                    handleAudioChunk(data.audio);
                 }
             },
             onerror(err) {
