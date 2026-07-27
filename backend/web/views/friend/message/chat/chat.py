@@ -86,7 +86,8 @@ class MesssageChatView(APIView):
                 self.event_stream(app, inputs, friend, message), 
                 content_type="text/event-stream"
             )
-            response['Cache-control'] = "no-cache"
+            response['Cache-control'] = 'no-cache'
+            response['X-Accel-Buffering'] = 'no'
             return response
         except Exception as e:
             logger.exception(e)

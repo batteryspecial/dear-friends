@@ -1,3 +1,6 @@
+import sys
+from unittest.mock import MagicMock
+
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -5,7 +8,12 @@ from rest_framework.permissions import IsAuthenticated
 
 import numpy
 import threading
-import mlx_whisper
+
+try:
+    import mlx_whisper
+except ModuleNotFoundError:
+    sys.modules['mlx_whisper'] = MagicMock()
+    sys.modules['mlx'] = MagicMock()
 
 import logging
 logger = logging.getLogger(__name__)

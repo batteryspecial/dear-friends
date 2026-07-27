@@ -4,13 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently -n frontend,backend -c blue,green \"vite\" \"cd ../backend && ../.venv/bin/python manage.py runserver\"",
+    "dev": "concurrently -n frontend,backend -c blue,green \"vite\" \"cd ../backend && ../.venv/bin/python manage.py runserver --noreload --nothreading --skip-checks\"",
     "dev:frontend": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "npm run type-check && npm run build-only",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build"
-  },
+    "type-check": "vue-tsc --noEmit"
+},
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",
     "@ricky0123/vad-web": "^0.0.30",

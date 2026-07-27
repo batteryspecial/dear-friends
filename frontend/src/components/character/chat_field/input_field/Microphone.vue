@@ -18,7 +18,7 @@ const { color } = defineProps(["color"]);
 let vadInstance: MicVAD | null = null;
 
 const startRecording = async (): Promise<void> => {
-    const baseUrl: string = "http://localhost:5173/vad/"; // change to http://127.0.0.1:8000/static/frontend/vad/ in prod
+    const baseUrl: string = "http://127.0.0.1:8000/static/frontend/vad/"; // change to http://127.0.0.1:8000/static/frontend/vad/ in prod
     try {
         vadInstance = await MicVAD.new({
             baseAssetPath: baseUrl,
