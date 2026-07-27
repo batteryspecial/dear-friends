@@ -15,6 +15,7 @@ frontend/public/vad/
 
 # production
 backend/**/__pycache__
+backend/staticfiles/
 backend/web/documents/data.md
 backend/web/documents/lancedb_storage/
 

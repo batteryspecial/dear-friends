@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Friend } from '@/views/create/CreateIndex.vue';
-import { useTemplateRef, computed, ref, nextTick } from 'vue';
+import { useTemplateRef, computed, ref, nextTick, onMounted, onUnmounted } from 'vue';
 import InputField from './input_field/InputField.vue';
 import CharacterImageField from './image_field/CharacterImageField.vue';
 import ChatHistory from './chat_history/ChatHistory.vue';
@@ -58,6 +58,18 @@ const bgStyle = computed(() => {
     return friend ? { backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.25)), url(${friend.character.bg_image})` } : {}
 })
 
+const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+        handleClose();
+    }
+};
+
+onMounted(() => {
+    window.addEventListener('keydown', handleKeyDown);
+});
+onUnmounted(() => {
+    window.removeEventListener('keydown', handleKeyDown);
+});
 defineExpose({
     showModal,
 })
