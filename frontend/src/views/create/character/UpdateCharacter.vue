@@ -9,6 +9,7 @@ import api from '@/js/http/api.ts';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user.ts';
 import { isAxiosError } from 'axios';
+import Visibility from './_components/Visibility.vue';
 
 interface Character {
     id: string;
@@ -16,6 +17,7 @@ interface Character {
     desc: string;
     image: string;
     bg_image: string;
+    visibility: boolean;
 }
 
 const route = useRoute();
@@ -34,6 +36,7 @@ onMounted(async () => {
         const data = r.data;
         if (data.result === "success") {
             character.value = data.character;
+            console.log(data.character);
         }
     } catch (err) {
         console.log(err);
@@ -44,6 +47,7 @@ const imageRef = useTemplateRef('image-ref');
 const nameRef = useTemplateRef('name-ref');
 const descRef = useTemplateRef('desc-ref');
 const bgRef = useTemplateRef('bg-ref');
+const visibilityRef = useTemplateRef('visibility-ref')
 
 const errMsg = ref<string | null>(null);
 
@@ -52,6 +56,7 @@ async function handleUpdate() {
     const newName = nameRef.value?.newName?.trim();
     const newDesc = descRef.value?.newDesc?.trim();
     const newBgImage = bgRef.value?.newBackground;
+    const newVisibility = visibilityRef.value?.newVisibility;
 
     errMsg.value = '';
 
@@ -63,6 +68,8 @@ async function handleUpdate() {
         errMsg.value = '角色简介不能为空';
     } else if (!newBgImage) {
         errMsg.value = '聊天背景不能为空';
+    } else if (newVisibility === null || newVisibility === undefined) {
+        errMsg.value = '可见度不能为空';
     } else {
         const formData = new FormData();
 
@@ -74,6 +81,8 @@ async function handleUpdate() {
             formData.append('image', base64ToFile(newImage, 'image.png'));
         if (newBgImage !== character.value?.bg_image)
             formData.append('bg_image', base64ToFile(newBgImage, 'background.png'));
+        if (newVisibility !== character.value?.visibility)
+            formData.append('visibility', newVisibility);
 
         try {
             const r = await api.post('/api/create/character/update/', formData);
@@ -104,6 +113,7 @@ async function handleUpdate() {
                 <Name ref="name-ref" :name="character.name"/>
                 <Description ref="desc-ref" :desc="character.desc" />
                 <Background ref="bg-ref" :bg="character.bg_image" />
+                <Visibility ref="visibility-ref" :visibility="character.visibility" />
 
                 <p v-if="errMsg" class="text-red-500 text-sm">{{ errMsg }}</p>
 

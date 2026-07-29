@@ -21,6 +21,7 @@ class CreateCharacterView(APIView):
             desc = request.data.get("desc", "").strip()[:6767]
             image = request.FILES.get("image", None)
             bg_image = request.FILES.get("bg_image", None)
+            visibility = request.data.get("visibility")
 
             if not name:
                 return Response({ 'result' : '名字不能为空' }, status=400)
@@ -37,6 +38,8 @@ class CreateCharacterView(APIView):
             }
             if bg_image:
                 character_data['bg_image'] = bg_image
+            if visibility is not None:
+                character_data['visibility'] = visibility == 'true'
             
             Character.objects.create(**character_data)
             return Response({ 'result' : 'success' }, status=200)

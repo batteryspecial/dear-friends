@@ -88,6 +88,7 @@ onBeforeUnmount(() => {
                 :key="f.id"
                 :character="f.character"
                 :canRemoveFriend="true"
+                :canEdit="false"
                 :friend="f"
                 @remove="removeFriend"
             />

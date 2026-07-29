@@ -4,6 +4,7 @@ import Background from './_components/Background.vue';
 import Description from './_components/Description.vue';
 import Image from './_components/Image.vue';
 import Name from './_components/Name.vue';
+import Visibility from './_components/Visibility.vue';
 import { base64ToFile } from '@/js/utils/base64_to_file.ts';
 import api from '@/js/http/api.ts';
 import { useRouter } from 'vue-router';
@@ -20,6 +21,7 @@ const imageRef = useTemplateRef('image-ref');
 const nameRef = useTemplateRef('name-ref');
 const descRef = useTemplateRef('desc-ref');
 const bgRef = useTemplateRef('bg-ref');
+const visibilityRef = useTemplateRef('visibility-ref');
 
 const errMsg = ref<string | null>(null);
 
@@ -28,6 +30,7 @@ async function handleCreate() {
     const name = nameRef.value?.newName?.trim();
     const desc = descRef.value?.newDesc?.trim();
     const bg = bgRef.value?.newBackground;
+    const visibility = visibilityRef.value?.newVisibility;
 
     errMsg.value = '';
 
@@ -43,6 +46,7 @@ async function handleCreate() {
         formData.append('desc', desc);
         formData.append('image', base64ToFile(image, 'image.png'));
         if (bg) formData.append('bg_image', base64ToFile(bg, 'background.png'));
+        formData.append('visibility', visibility);
 
         try {
             const r = await api.post('/api/create/character/create/', formData);
@@ -73,6 +77,7 @@ async function handleCreate() {
                 <Name ref="name-ref"/>
                 <Description ref="desc-ref"/>
                 <Background ref="bg-ref"/>
+                <Visibility ref="visibility-ref" :visibility="true"/>
 
                 <p v-if="errMsg" class="text-red-500 text-sm">{{ errMsg }}</p>
 

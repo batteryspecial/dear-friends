@@ -23,6 +23,7 @@ class UpdateCharacterView(APIView):
             desc = request.data['desc'].strip()
             image = request.FILES.get('image', None)
             bg_image = request.FILES.get('bg_image', None)
+            visibility = request.data.get('visibility')
 
             if not name:
                 return Response({
@@ -39,15 +40,15 @@ class UpdateCharacterView(APIView):
             if bg_image:
                 remove_old_image(character.bg_image)
                 character.bg_image = bg_image
+            if visibility is not None:
+                character.visibility = visibility == 'true'
 
             character.name = name
             character.desc = desc
             character.updated_at = now()
             character.save()
 
-            return Response({
-                'result' : 'success'
-            }, status=200)
+            return Response({ 'result' : 'success' }, status=200)
         except Exception as e:
             logger.exception(e)
             return Response({ 'result' : '系统异常，请稍后重试'}, status=500)

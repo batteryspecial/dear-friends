@@ -141,7 +141,7 @@ onMounted(async () => {
                     >
                         <div class="overflow-hidden pe-5">
                             <div class="text-white text-lg font-bold line-clamp-1 break-all">{{ character.name }}</div>
-                            <p class="text-white mt-1 line-clamp-2">
+                            <p class="text-white mt-1 whitespace-pre-line line-clamp-2">
                                 {{ character.desc }}
                             </p>
                         </div>

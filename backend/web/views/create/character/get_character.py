@@ -20,6 +20,7 @@ class GetCharacterView(APIView):
                     'desc' : character.desc,
                     'image' : character.image.url,
                     'bg_image' : character.bg_image.url,
+                    'visibility': character.visibility,
                 }
             }, status=200)
         except:

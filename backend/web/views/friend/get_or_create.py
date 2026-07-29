@@ -3,6 +3,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
+from web.models.character import Character
 from web.models.user import UserProfile
 from web.models.friend import Friend
 
@@ -22,6 +23,9 @@ class GetOrCreateFriendView(APIView):
             if friends.exists():
                 friend = friends.first()
             else:
+                character = Character.objects.get(id=character_id)
+                if not character.visibility and character.author != user_profile:
+                    return Response({'result': '角色不存在'}, status=404)
                 friend = Friend.objects.create(me=user_profile, character_id=character_id)
             
             character = friend.character

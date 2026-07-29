@@ -13,9 +13,9 @@ class HomepageIndexView(APIView):
             items_count = int(request.query_params.get('items_count', 0))
             search_query = request.query_params.get('search_query', '')
             if search_query:
-                queryset = Character.objects.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query))
+                queryset = Character.objects.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query), visibility=True)
             else:
-                queryset = Character.objects.all()
+                queryset = Character.objects.filter(visibility=True)
 
             characters_raw = queryset.order_by('-id')[items_count : items_count + 20]
             characters = []

@@ -18,7 +18,10 @@ class GetCharacterListView(APIView):
             user = User.objects.get(id=user_id)
             user_profile = UserProfile.objects.get(user=user)
 
-            characters_raw = Character.objects.filter(author=user_profile).order_by('-id')[items_count : items_count + 20]
+            if request.user.is_authenticated and request.user.id == user.id:
+                characters_raw = Character.objects.filter(author=user_profile).order_by('-id')[items_count : items_count + 20]
+            else:
+                characters_raw = Character.objects.filter(author=user_profile, visibility=True).order_by('-id')[items_count : items_count + 20]
             
             characters = []
             for c in characters_raw:
