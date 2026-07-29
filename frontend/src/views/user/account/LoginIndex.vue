@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { isAxiosError } from 'axios';
 
 import api from '@/js/http/api';
 import { useUserStore } from '@/stores/user';
@@ -42,6 +43,9 @@ async function handleLogin() {
             }
         }
         catch (e) {
+            // A network failure has no response body, so fall back to a generic hint
+            // rather than leaving the form silent.
+            errMsg.value = (isAxiosError(e) ? e.response?.data?.result : null) ?? '请求失败，请稍后重试'
             console.log(e)
         }
     }

@@ -9,8 +9,7 @@
 import { fetchEventSource, type EventSourceMessage } from '@microsoft/fetch-event-source';
 import { useUserStore } from "@/stores/user.js";
 import api from "./api.js";
-
-const BASE_URL = 'http://127.0.0.1:8000'
+import { BASE_URL } from "./config";
 
 export type StreamMessagePayload = {
     content?: string;

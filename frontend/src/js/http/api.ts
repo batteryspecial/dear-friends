@@ -13,6 +13,8 @@ import axios, { AxiosError } from "axios";
 import type { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
 import { useUserStore } from "@/stores/user";
+import { BASE_URL } from "./config";
+import { showApiError } from "./error";
 
 interface RetryableRequest extends InternalAxiosRequestConfig {
     _retry?: boolean
@@ -23,8 +25,6 @@ interface RefreshTokenResponse {
 }
 
 type TokenRefreshCallback = (token: string | null, error?: unknown) => void
-
-const BASE_URL = 'http://127.0.0.1:8000'
 
 const api = axios.create({
     baseURL: BASE_URL,
@@ -64,6 +64,16 @@ api.interceptors.response.use(
 
         const user = useUserStore()
         const originalRequest = error?.config as RetryableRequest | undefined
+
+        // No error.response means the request never reached Django at all:
+        // server down, DNS/CORS, or connection refused. Axios reports this as a
+        // bare "Network Error" with nothing for a view to read off, which is why
+        // failures here used to leave the UI blank.
+        if (!error.response) {
+            showApiError('出错了，请检查网络连接')
+        } else if (error.response.status >= 500) {
+            showApiError('出错了，服务器异常')
+        }
 
         if (!originalRequest) {
             // no config data 🪫 give it up son 😢

@@ -5,6 +5,7 @@ import { onMounted } from 'vue';
 
 import { useUserStore } from './stores/user';
 import api from './js/http/api';
+import { apiErrMsg, clearApiError } from './js/http/error';
 
 
 const user = useUserStore()
@@ -37,6 +38,14 @@ onMounted(async () => {
 
 <template>
   <HomeView />
+
+  <!-- Catches request failures the individual views only console.log -->
+  <div v-if="apiErrMsg" class="toast toast-top toast-center z-50">
+    <div class="alert alert-error" role="alert" aria-live="assertive">
+      <span>{{ apiErrMsg }}</span>
+      <button class="btn btn-ghost btn-xs" aria-label="关闭" @click="clearApiError">✕</button>
+    </div>
+  </div>
 </template>
 
 <style scoped>

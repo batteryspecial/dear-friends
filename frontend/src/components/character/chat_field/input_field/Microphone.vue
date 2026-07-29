@@ -4,6 +4,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { MicVAD } from '@ricky0123/vad-web';
 import { float32ToInt16 } from '@/utils/audio';
 import api from '@/js/http/api';
+import { BASE_URL } from '@/js/http/config';
 
 type ASRProcessingResponse = {
     result: string;
@@ -18,7 +19,7 @@ const { color } = defineProps(["color"]);
 let vadInstance: MicVAD | null = null;
 
 const startRecording = async (): Promise<void> => {
-    const baseUrl: string = "http://127.0.0.1:8000/static/frontend/vad/"; // change to http://127.0.0.1:8000/static/frontend/vad/ in prod
+    const baseUrl: string = `${BASE_URL}/static/frontend/vad/`;
     try {
         vadInstance = await MicVAD.new({
             baseAssetPath: baseUrl,
