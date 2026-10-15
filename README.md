@@ -1,3 +1,6 @@
+<img width="405" height="305" alt="dearfriends" src="https://github.com/user-attachments/assets/09a44419-ebb2-42fd-b33b-bf6ea1d773e5" />
+
+
 ## dear-friends
 A Vue.js and Django REST Framework project. Run frontend and backend concurrently from project root (venv required), or run them separately.
 
